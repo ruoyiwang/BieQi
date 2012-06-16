@@ -1,24 +1,26 @@
 #include "Table.h"
 
-
 class Player{
 public:
+	friend class referee;
 	Player();
 	~Player();
-	virtual bool play();
+	virtual void play();	
+	virtual void discard();
+	std::vector<Card> cHand();
 protected:
-	std::vector<Card> cHand;
+	std::vector<Card> cHand_;
+	int iScore_;
 };
 
 class HumanPlayer:Player{
 public:
-	bool play();
-private:
-	
+	void play();		//asks the user for input on which card to play
+	void discard();
 };
 
 class CompPlayer:Player{
 public:
-	bool play();
-
+	void play();
+	void discard();
 };
