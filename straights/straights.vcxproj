@@ -62,11 +62,15 @@
   <ItemGroup>
     <ClCompile Include="Card.cpp" />
     <ClCompile Include="Command.cpp" />
+    <ClCompile Include="main.cpp" />
     <ClCompile Include="shuffle.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Card.h" />
     <ClInclude Include="Command.h" />
+    <ClInclude Include="Player.h" />
+    <ClInclude Include="Referee.h" />
+    <ClInclude Include="Table.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
