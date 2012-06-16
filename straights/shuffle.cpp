@@ -9,8 +9,7 @@ cards_ is an array of pointers to cards
 */
 
 void shuffle(){
-	// comment out at this moment
-	/*int n = CARD_COUNT;
+	int n = CARD_COUNT;
 
 	while ( n > 1 ) {
 		int k = (int) (lrand48() % n);
@@ -18,5 +17,5 @@ void shuffle(){
 		Card *c = cards_[n];
 		cards_[n] = cards_[k];
 		cards_[k] = c;
-	}*/
+	}
 }
