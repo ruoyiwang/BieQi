@@ -2,14 +2,17 @@
 #define _PLAYER_
 
 #include "Table.h"
+#include "Referee.h";
+
+class Referee;
 
 class Player{
 public:
 	friend class referee;
 	Player();
 	~Player();
-	virtual Card play(Table&);	
-	virtual Card discard();
+	virtual void play(Table&, Referee&);	
+	virtual void discard(Referee&);
 	std::vector<Card> cHand();
 protected:
 	std::vector<Card> cHand_;
@@ -18,14 +21,14 @@ protected:
 
 class HumanPlayer:public Player{
 public:
-	Card HumanPlayer::play(Table&);		//asks the user for input on which card to play
-	Card discard();
+	void HumanPlayer::play(Table&, Referee&);		//asks the user for input on which card to play
+	void discard(Referee& rR);
 };
 
 class CompPlayer:public Player{
 public:
-	Card CompPlayer::play(Table&);
-	Card discard();
+	void CompPlayer::play(Table&, Referee&);
+	void discard(Referee& rR);
 };
 
 #endif

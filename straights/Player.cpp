@@ -1,4 +1,6 @@
 #include "Player.h"
+#include "Card.h"
+#include "Referee.h";
 #include <iostream>
 #include <string>
 
@@ -13,14 +15,14 @@ vector<Card> Player::cHand(){
 }
 
 
-//Card HumanPlayer::play(Table& tTable){
-//	string sTemp;
-//	while (cin>>sTemp){
-//
-//	}
-//}
+void HumanPlayer::play(Table& tTable, Referee& rR){
+	string sTemp;
+	while (cin>>sTemp){
 
-Card CompPlayer::play(Table& tTable){
+	}
+};
+
+void CompPlayer::play(Table& tTable, Referee& rR){
 	string sTemp;
 	//locate all 8 possible cards+
 	vector<Card> cAllowed;
@@ -47,19 +49,18 @@ Card CompPlayer::play(Table& tTable){
 	for (int i = 0; i < cHand_.size(); i++){	//find the right card to place
 		for (int j = 0; j < cAllowed.size(); j++){
 			if (cHand_.at(i) == cAllowed.at(j)){
-				Card cCard = cHand_.at(i);
-				return cCard;
+				rR.checkPlay(*this, cHand_.at(i));
+				return;
 			}
 		}
 	}
-	return Card(SUIT_COUNT, RANK_COUNT);
+	this->discard(rR);
 }
 
-Card CompPlayer::discard(){
-	Card cNew = cHand_.front();
-	swap(cHand_.at(0), cHand_.back());
-	cHand_.pop_back();		//this will always work!!! I think.
-	return cNew;
+void CompPlayer::discard(Referee& rR){
+	rR.checkDiscard(*this, cHand_.back());
+	cHand_.pop_back();		
+	return;
 }
 
 void temp(){
