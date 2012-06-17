@@ -15,7 +15,7 @@ vector<Card> Player::cHand(){
 }
 
 
-void CompPlayer::play(Table tTable, Referee rR){
+void HumanPlayer::play(Table tTable, Referee rR){
 	string sTemp;
 	while (cin>>sTemp){
 
