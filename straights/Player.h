@@ -1,3 +1,6 @@
+#ifndef _PLAYER_
+#define _PLAYER_
+
 #include "Table.h"
 
 class Player{
@@ -24,3 +27,5 @@ public:
 	void play();
 	void discard();
 };
+
+#endif

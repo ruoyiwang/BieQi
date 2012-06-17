@@ -1,3 +1,6 @@
+#ifndef _TABLE_
+#define _TABLE_
+
 #include "Card.h"
 #include <vector>
 
@@ -29,3 +32,5 @@ private:
 	std::vector<Card> cDiamonds_;
 	std::vector<Card> cSpades_;
 };
+
+#endif
