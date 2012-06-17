@@ -1,5 +1,6 @@
-#include "Card.h";
+#include "Card.h"
 #include <vector>
+
 class Table{
 public:
 	Table();
@@ -9,16 +10,20 @@ public:
 	std::vector<Card> cDiamonds();
 	std::vector<Card> cSpades();
 
+	void placeCard(Card);
 private:
-	class StartingDeck{	//自动发牌机, you know...
+	class Deck{
 	public:
-		StartingDeck();
-		~StartingDeck();
+		Deck();
+		~Deck();
 		std::vector<Card> cCards;
-		bool PlaceCard(Card);
 	private:
-		std::vector<Card> cCards_;
+		std::vector<Card> cCards_;	
 	};
+	
+	Deck Deck_;
+
+	// cards on the table
 	std::vector<Card> cHearts_;
 	std::vector<Card> cClubs_;
 	std::vector<Card> cDiamonds_;
