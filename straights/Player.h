@@ -18,6 +18,8 @@ protected:
 	std::vector<Card> cHand_;
 	int iScore_;
 	int iPlayerId_;
+	bool checkInHand(Card&);
+	void removeFromHand(Card&);
 };
 
 class HumanPlayer:public Player{
