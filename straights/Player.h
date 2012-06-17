@@ -2,9 +2,9 @@
 #define _PLAYER_
 
 #include "Table.h"
-#include "Referee.h";
+//#include "Referee.h";
 
-class Referee;
+class Referee;bbb
 
 class Player{
 public:

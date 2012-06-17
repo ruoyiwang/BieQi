@@ -4,8 +4,6 @@
 #include "Card.h"
 #include "Player.h"
 
-class Player; 
-
 class Referee{
 public:
 	Referee();
