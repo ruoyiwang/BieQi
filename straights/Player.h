@@ -13,13 +13,13 @@ protected:
 	int iScore_;
 };
 
-class HumanPlayer:Player{
+class HumanPlayer:public Player{
 public:
 	void play();		//asks the user for input on which card to play
 	void discard();
 };
 
-class CompPlayer:Player{
+class CompPlayer:public Player{
 public:
 	void play();
 	void discard();
