@@ -6,7 +6,7 @@
 
 class Referee{
 public:
-	Referee();
+	Referee(){};
 	static bool checkPlay(Player& p, Card& c);
 	static bool checkDiscard(Player& p, Card& c);
 	static bool checkGameEnd();

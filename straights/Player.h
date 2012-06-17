@@ -4,31 +4,32 @@
 #include "Table.h"
 //#include "Referee.h";
 
-class Referee;bbb
+class Referee;
 
 class Player{
 public:
 	friend class referee;
-	Player();
+	Player(int iPlayerId);
 	~Player();
-	virtual void play(Table&, Referee&);	
-	virtual void discard(Referee&);
+	virtual bool play(Table&, Referee&, Card&);	
+	virtual bool discard(Referee&, Card&);
 	std::vector<Card> cHand();
 protected:
 	std::vector<Card> cHand_;
 	int iScore_;
+	int iPlayerId_;
 };
 
 class HumanPlayer:public Player{
 public:
-	void HumanPlayer::play(Table&, Referee&);		//asks the user for input on which card to play
-	void discard(Referee& rR);
+	bool HumanPlayer::play(Table&, Referee&, Card&);		//asks the user for input on which card to play
+	bool discard(Referee& rR, Card&);
 };
 
 class CompPlayer:public Player{
 public:
-	void CompPlayer::play(Table&, Referee&);
-	void discard(Referee& rR);
+	bool CompPlayer::play(Table&, Referee&, Card&);
+	bool discard(Referee& rR, Card&);
 };
 
 #endif

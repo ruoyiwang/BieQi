@@ -66,6 +66,7 @@
     <ClCompile Include="Command.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="Referee.cpp" />
     <ClCompile Include="shuffle.cpp" />
     <ClCompile Include="Table.cpp" />
   </ItemGroup>

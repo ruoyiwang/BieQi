@@ -6,7 +6,7 @@
 
 using namespace std;
 
-Player::Player(){}
+Player::Player(int iPlayerId):iPlayerId_(iPlayerId){}
 
 Player::~Player(){}
 
@@ -15,14 +15,14 @@ vector<Card> Player::cHand(){
 }
 
 
-void HumanPlayer::play(Table& tTable, Referee& rR){
+bool HumanPlayer::play(Table& tTable, Referee& rR, Card& cCard){
 	string sTemp;
 	while (cin>>sTemp){
 
 	}
 };
 
-void CompPlayer::play(Table& tTable, Referee& rR){
+bool CompPlayer::play(Table& tTable, Referee& rR, Card& cCard){
 	string sTemp;
 	//locate all 8 possible cards+
 	vector<Card> cAllowed;
@@ -49,21 +49,21 @@ void CompPlayer::play(Table& tTable, Referee& rR){
 	for (int i = 0; i < cHand_.size(); i++){	//find the right card to place
 		for (int j = 0; j < cAllowed.size(); j++){
 			if (cHand_.at(i) == cAllowed.at(j)){
-				rR.checkPlay(*this, cHand_.at(i));
-				return;
+				if (rR.checkPlay(*this, cHand_.at(i))){
+					cout<<"Player "<<iPlayerId_<<" plays "<<cHand_.at(i)<<endl;
+					return true;
+				}
 			}
 		}
 	}
-	this->discard(rR);
+	return discard(rR, cHand_.at(0));
 }
 
-void CompPlayer::discard(Referee& rR){
-	rR.checkDiscard(*this, cHand_.back());
-	cHand_.pop_back();		
-	return;
-}
-
-void temp(){
-	Player A;
-	A = CompPlayer();
+bool CompPlayer::discard(Referee& rR, Card& cCard){
+	if(rR.checkDiscard(*this, cCard)){
+		cout<<"Player "<<iPlayerId_<<" discards "<<cCard<<endl;
+		cHand_.erase(cHand_.begin());
+		return true;
+	}
+	return false;
 }
