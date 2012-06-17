@@ -7,8 +7,8 @@
 class Referee{
 public:
 	Referee();
-	static bool checkPlay(Player&, Card&);
-	static bool checkDiscard(Player&, Card&);
+	static bool checkPlay(Player& p, Card& c);
+	static bool checkDiscard(Player& p, Card& c);
 	static bool checkGameEnd();
 private:
 
