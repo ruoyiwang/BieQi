@@ -10,6 +10,9 @@
 
 using namespace std;
 
+vector<Player*> playerList;
+vector<Player*> gamePlayerList;
+
 Player* invitePlayer(int i){
 	string command;
 
@@ -98,7 +101,7 @@ bool testValidPaly(Card playCard, vector<Card> legalPlay){
 	return false;
 }
 
-void humanPlayerGamePlay(Player* player, Table& cardTable, Referee& referee){
+void humanPlayerGamePlay(Player* player, Table& cardTable, Referee& referee, int playerPos){
 	bool validCard = false;
 	pirntTableStatus(cardTable);
 	vector<Card> legalPlay = printPlayerStatus(player, cardTable, referee);
@@ -129,6 +132,11 @@ void humanPlayerGamePlay(Player* player, Table& cardTable, Referee& referee){
 				exit(1);
 				break;
 			case RAGEQUIT:
+				player = referee.rangeQuit(player); // referee handles the angery player
+				player->play(cardTable, referee, Card(CLUB,ACE)); // excute computer play
+				gamePlayerList[playerPos] = player;
+				playerList[player->iPlayerId()-1] = player;
+				cmdFlag = true; // ends the command loop
 				break;
 			default:
 				break;
@@ -138,15 +146,13 @@ void humanPlayerGamePlay(Player* player, Table& cardTable, Referee& referee){
 }
 
 // base game play helper function, decides different control flow for comp & human player
-void gamePlay(Player* player, Table& cardTable, Referee& referee){
+void gamePlay(Player* player, Table& cardTable, Referee& referee, int playerPos){
 	HumanPlayer* castTest = dynamic_cast<HumanPlayer*> (player);
 	if (castTest){
-		humanPlayerGamePlay(player, cardTable, referee);
+		humanPlayerGamePlay(player, cardTable, referee, playerPos);
 	}
 	else player->play(cardTable, referee, Card(CLUB,ACE)); // computerPlayer, pass in a dummy card
 }
-
-vector<Player*> playerList;
 
 int main(int argc, char* argv[]){
 	if (argc > 1){
@@ -170,19 +176,19 @@ int main(int argc, char* argv[]){
 
 		cout <<"A new round begins. It's player <"<< startingPlayerId <<">'s turn to play."<<endl;
 		// sort playList with the player with 7 of spades at first
-		vector<Player*> gamePlayerList = sortPlayerList( playerList, startingPlayerId -1); // playerid - 1 = player's pos in vector
+		gamePlayerList = sortPlayerList( playerList, startingPlayerId -1); // playerid - 1 = player's pos in vector
 		
 		// 3. Gameplay
 		while (true){
 			for (int i = 0 ; i < 4; i++)
-				gamePlay(gamePlayerList[i], cardTable, referee);
+				gamePlay(gamePlayerList[i], cardTable, referee, i);
 
 			// checks if round ends
-			if (referee.checkRoundEnd(cardTable, gamePlayerList))
+			if (referee.checkRoundEnd(cardTable, playerList))
 				break;
 		}
 		// check if game ends
-		if (referee.checkGameEnd(gamePlayerList))
+		if (referee.checkGameEnd(playerList))
 			break;
 	}
 

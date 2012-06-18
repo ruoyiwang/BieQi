@@ -121,7 +121,7 @@ bool Referee::checkRoundEnd(Table& cardTable, vector<Player*> playerList){
 
 
 bool Referee::checkGameEnd(vector<Player*> playerList){
-	int minScore = 80;
+	int minScore = playerList[0]->iScore_;
 	bool gameEndFlag = false;
 	// check sroce on each player
 	for (unsigned int i = 0 ; i < playerList.size();i++){
@@ -186,3 +186,21 @@ void Referee::discardCard(Card discardingCard, Player* player){
 	cardPlayed++;
 }
 
+
+Player* Referee::rangeQuit(Player*& humanPlayer){
+	Player* curHumPlayer = humanPlayer;
+	Player* newCompPlayer = new CompPlayer(humanPlayer->iPlayerId_);
+
+	cout << "Player <"<<humanPlayer->iPlayerId_<<"> ragequits. A computer will now take over." << endl;
+	for (unsigned int i = 0 ; i< humanPlayer->cHand_.size();i++)
+		newCompPlayer->cHand_.push_back(humanPlayer->cHand_[i]);
+
+	for (unsigned int i = 0 ; i< humanPlayer->cDiscarded_.size();i++)
+		newCompPlayer->cDiscarded_.push_back(humanPlayer->cDiscarded_[i]);
+
+	newCompPlayer->iScore_ = humanPlayer->iScore_;
+	humanPlayer = newCompPlayer;
+	delete curHumPlayer;
+	
+	return humanPlayer;
+}
