@@ -88,6 +88,7 @@ void printDeck(Table& cardTable){
 	}
 }
 
+// test if the card is a legal play
 bool testValidPaly(Card playCard, vector<Card> legalPlay){
 	for (unsigned int i = 0 ;  i < legalPlay.size(); i++){
 		if(playCard == legalPlay[i])
@@ -103,7 +104,7 @@ void humanPlayerGamePlay(Player* player, Table& cardTable, Referee& referee){
 	vector<Card> legalPlay = printPlayerStatus(player, cardTable, referee);
 
 	bool cmdFlag = false;
-	while (!cmdFlag){
+	while (!cmdFlag){ // loops until a 
 		Command cmd;
 		cin >> cmd;
 		
@@ -136,12 +137,13 @@ void humanPlayerGamePlay(Player* player, Table& cardTable, Referee& referee){
 
 }
 
+// base game play helper function, decides different control flow for comp & human player
 void gamePlay(Player* player, Table& cardTable, Referee& referee){
 	HumanPlayer* castTest = dynamic_cast<HumanPlayer*> (player);
 	if (castTest){
 		humanPlayerGamePlay(player, cardTable, referee);
 	}
-	else player->play(cardTable, referee, Card(CLUB,ACE)); // computerPlayer pass in a dummy card
+	else player->play(cardTable, referee, Card(CLUB,ACE)); // computerPlayer, pass in a dummy card
 }
 
 vector<Player*> playerList;
@@ -158,6 +160,7 @@ int main(int argc, char* argv[]){
 	for(int i = 0; i<4;i++)
 		playerList.push_back( invitePlayer(i+1));
 
+	// game loop
 	while (true){
 		Table cardTable;
 		Referee referee;
@@ -174,10 +177,16 @@ int main(int argc, char* argv[]){
 			for (int i = 0 ; i < 4; i++)
 				gamePlay(gamePlayerList[i], cardTable, referee);
 
+			// checks if round ends
 			if (referee.checkRoundEnd(cardTable, gamePlayerList))
 				break;
 		}
+		// check if game ends
 		if (referee.checkGameEnd(gamePlayerList))
 			break;
 	}
+
+	// delete heap allocated players
+	for (unsigned int i = 0; i < playerList.size();i++)
+		delete playerList[i];
 }

@@ -20,17 +20,22 @@ void shuffle(vector<Card>& deck){
 	}
 }
 
+// helper function for finding legal plays for one suit according to current cards on table
 void legalPlaysForOneSuit (vector<Card> suit, Suit suitType,  vector<Card>&legalPlays ){
+	// if no cards, 7 is the only option
 	if (suit.size() == 0){
 		legalPlays.push_back(Card(suitType, SEVEN));
 		return;
 	}
+	// get first & the last card
 	Rank firstCardRank = (*suit.begin()).getRank();
 	Rank lastCardRank = suit.back().getRank();
 
+	// if first card != ACE, the legal paly is the one before the first card
 	if (firstCardRank !=ACE)
 		legalPlays.push_back (Card(suitType, static_cast<Rank>(firstCardRank-1)));
 
+	// same for finding last card
 	if (lastCardRank != KING)
 		legalPlays.push_back((Card(suitType, static_cast<Rank>(lastCardRank+1))));
 }
@@ -38,17 +43,20 @@ void legalPlaysForOneSuit (vector<Card> suit, Suit suitType,  vector<Card>&legal
 
 }
 
+// referee hands out the cards to players
 int Referee::dealing(Table& cardTable, vector<Player*>playerList){
-	shuffle(cardTable.Deck_.cCards_ );
-	int ret = 0;
+	shuffle(cardTable.Deck_.cCards_ ); // shuffle function
+	int ret = 0; // ret value which will be the player who has 7 of spades
 
 	for (int i = 0 ; i < 4 ; i++){
 		for (int j = i*13 ; j < (i+1)*13; j++){
 			Card curCard = cardTable.Deck_.cCards_[j];
 
+			// test if the card is 7 of spades
 			if (curCard.getRank() == SEVEN && curCard.getSuit() == SPADE)
 				ret = i;
 
+			// give the card to the player
 			playerList[i]->cHand_.push_back(cardTable.Deck_.cCards_[j]);
 		}
 	}
@@ -60,11 +68,13 @@ vector<Card> Referee::getLegalPlays(Table& cardTable, vector<Card> hand){
 	vector<Card> legalPlays;
 	vector<Card> legalPlaysInHand;
 
+	// find legal play for each suit
 	legalPlaysForOneSuit(cardTable.cClubs(), CLUB, legalPlays);
 	legalPlaysForOneSuit(cardTable.cDiamonds() , DIAMOND, legalPlays);
 	legalPlaysForOneSuit(cardTable.cHearts(), HEART, legalPlays);
 	legalPlaysForOneSuit(cardTable.cSpades(),SPADE, legalPlays);
 
+	// decide the final legal plays according to player's hand
 	for (unsigned int i = 0 ; i < legalPlays.size();i++){
 		for (unsigned int j = 0 ; j < hand.size(); j++){
 			if (legalPlays[i] == hand[j] ){
@@ -80,6 +90,7 @@ vector<Card> Referee::getLegalPlays(Table& cardTable, vector<Card> hand){
 
 
 bool Referee::checkRoundEnd(Table& cardTable, vector<Player*> playerList){
+	// if cardPlayed == 52 means all cards are used (including play/discard)
 	if (cardPlayed == 52)
 	{
 		for (unsigned int i = 0; i < playerList.size(); i++){
@@ -88,13 +99,14 @@ bool Referee::checkRoundEnd(Table& cardTable, vector<Player*> playerList){
 
 			cout << "Player <" << curPlayer->iPlayerId_ << ">'s discards:";
 			int newScore = 0;
+			// print discards & calculate scores
 			for (unsigned int j = 0 ; j < discards.size();j++){
 				cout  << " " << discards[j];
 				newScore += discards[j].getRank() + 1;
 			}
 			cout << endl;
 			cout << "Player <" <<curPlayer->iPlayerId_<< ">'s score: " <<curPlayer->iScore_<< " + " << newScore << " = " << curPlayer->iScore_+newScore <<endl;
-
+			// add score to player
 			curPlayer->iScore_ = curPlayer->iScore_ + newScore;
 			
 			// empty discards list for next round
@@ -111,21 +123,24 @@ bool Referee::checkRoundEnd(Table& cardTable, vector<Player*> playerList){
 bool Referee::checkGameEnd(vector<Player*> playerList){
 	int minScore = 80;
 	bool gameEndFlag = false;
+	// check sroce on each player
 	for (unsigned int i = 0 ; i < playerList.size();i++){
 		Player* curPlayer = playerList[i];
 		int playerScore = curPlayer->iScore_;
 
+		// if score >= 80, games can stop
 		if(playerScore >= 80){
 			gameEndFlag = true;
 			continue;
 		}
-
+		// store current lowest score
 		minScore = min(minScore, playerScore);
 	}
 
 	if (gameEndFlag){
 		for (unsigned int i = 0 ; i < playerList.size(); i++){
 			Player* curPlayer = playerList[i];
+			// print out winner(s)
 			if (minScore == curPlayer->iScore_)
 				cout << "Player <"<<curPlayer->iPlayerId_<<"> wins!"<<endl;
 		}
@@ -135,6 +150,7 @@ bool Referee::checkGameEnd(vector<Player*> playerList){
 }
 
 void Referee::placeCardHelper(Card placingCard, vector<Card>& suit){
+	// place card on certian suit on table
 	if (placingCard.getRank() >= SEVEN)
 		suit.push_back(placingCard);
 	else
@@ -142,6 +158,7 @@ void Referee::placeCardHelper(Card placingCard, vector<Card>& suit){
 }
 
 void Referee::placeCard(Card placingCard, Table& cardTable){
+	// used for placing card on the table
 	switch (placingCard.getSuit()){
 		case CLUB:
 			placeCardHelper ( placingCard,cardTable.cClubs_);
@@ -158,12 +175,14 @@ void Referee::placeCard(Card placingCard, Table& cardTable){
 		default:
 			break;
 	}
-
+	// inc # of cards played;
 	cardPlayed++;
 }
 
 void Referee::discardCard(Card discardingCard, Player* player){
+	// add discarded card to players data
 	player->cDiscarded_.push_back(discardingCard);
+	// inc # of cards played;
 	cardPlayed++;
 }
 

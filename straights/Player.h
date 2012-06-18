@@ -34,6 +34,7 @@ public:
 class CompPlayer:public Player{
 public:
 	CompPlayer(int);
+	CompPlayer(HumanPlayer*);
 	bool CompPlayer::play(Table&, Referee&, Card&);
 	bool discard(Referee& rR, Card&);
 };

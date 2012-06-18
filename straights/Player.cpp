@@ -30,8 +30,10 @@ bool HumanPlayer::play(Table& tTable, Referee& rR, Card& cCard){
 		cout<<"This is not a legal play."<<endl;
 		return false;
 	}
-	removeFromHand(cCard);
+	// asks referee to help place the card on table
 	rR.placeCard(cCard, tTable);
+	// remove the card from the player's pointer of view
+	removeFromHand(cCard);
 	return true;
 }
 
@@ -42,9 +44,10 @@ bool HumanPlayer::discard(Referee& rR, Card& cCard){
 		cout<<"This is not a legal play."<<endl;
 		return false;
 	}
-
-	removeFromHand(cCard);
+	// asks referee to help dicard the card (referee needs to count the cards played)
 	rR.discardCard(cCard, this);
+	// remove the card from the player's pointer of view
+	removeFromHand(cCard);
 	return true;
 }
 
@@ -58,8 +61,8 @@ bool CompPlayer::play(Table& tTable, Referee& rR, Card& cCard){
 			if (cHand_.at(i) == cAllowed.at(j)){
 				cCard = cHand_.at(i);
 				cout<<"Player "<<iPlayerId_<<" plays "<<cCard<<endl;
-				cHand_.erase(cHand_.begin() + i);
-				rR.placeCard(cCard, tTable);
+				rR.placeCard(cCard, tTable);// places the card
+				cHand_.erase(cHand_.begin() + i); // remove card on player's side
 				return true;
 			}
 		}
