@@ -7,12 +7,13 @@
 class Referee;
 
 class Player{
+friend class Referee;
 public:
-	friend class referee;
-	Player(int iPlayerId);
+	Player(int);
 	~Player();
-	virtual bool play(Table&, Referee&, Card&);	
-	virtual bool discard(Referee&, Card&);
+	virtual bool play(Table&, Referee&, Card&) = 0;	
+	virtual bool discard(Referee&, Card&) = 0;
+	int iPlayerId();
 	std::vector<Card> cHand();
 protected:
 	std::vector<Card> cHand_;
@@ -24,12 +25,14 @@ protected:
 
 class HumanPlayer:public Player{
 public:
+	HumanPlayer(int);
 	bool HumanPlayer::play(Table&, Referee&, Card&);		//asks the user for input on which card to play
 	bool discard(Referee& rR, Card&);
 };
 
 class CompPlayer:public Player{
 public:
+	CompPlayer(int);
 	bool CompPlayer::play(Table&, Referee&, Card&);
 	bool discard(Referee& rR, Card&);
 };

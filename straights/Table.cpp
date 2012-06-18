@@ -24,6 +24,10 @@ void Table::placeCard(Card placingCard){
 	}
 }
 
+vector<Card> Table::getDeck(){
+	return Deck_.cCards();
+}
+
 vector<Card> Table::cHearts(){
 	return cHearts_;
 }
@@ -45,6 +49,10 @@ Table::Deck::Deck(){
 	for (int suit = CLUB; suit < SUIT_COUNT; suit++)
 		for (int rank = ACE; rank < RANK_COUNT; rank++)
 			cCards_.push_back(Card( static_cast<Suit>(suit), static_cast<Rank>(rank)));
+}
+
+vector<Card> Table::Deck::cCards(){
+	return cCards_;
 }
 
 

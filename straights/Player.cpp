@@ -1,6 +1,7 @@
 #include "Player.h"
 #include "Card.h"
-#include "Referee.h";
+#include "Referee.h"
+
 #include <iostream>
 #include <string>
 
@@ -10,9 +11,17 @@ Player::Player(int iPlayerId):iPlayerId_(iPlayerId){}
 
 Player::~Player(){}
 
+int Player::iPlayerId(){
+	return iPlayerId_;
+}
+
 vector<Card> Player::cHand(){
 	return cHand_;
 }
+
+HumanPlayer::HumanPlayer(int iPlayerId): Player(iPlayerId){}
+
+CompPlayer::CompPlayer(int iPlayerId): Player(iPlayerId){}
 
 bool HumanPlayer::play(Table& tTable, Referee& rR, Card& cCard){
 	//check to see if card is even on hand
@@ -28,7 +37,7 @@ bool HumanPlayer::play(Table& tTable, Referee& rR, Card& cCard){
 	}
 	else
 		return false;
-};
+}
 
 bool HumanPlayer::discard(Referee& rR, Card& cCard){
 	//check to see if card is even on hand
@@ -70,8 +79,8 @@ bool CompPlayer::play(Table& tTable, Referee& rR, Card& cCard){
 	if ((tTable.cSpades().at(12).getRank()+1)<13)
 		cAllowed.push_back(Card(tTable.cSpades().at(0).getSuit(), Rank((tTable.cSpades().back().getRank()+1))));
 	
-	for (int i = 0; i < cHand_.size(); i++){	//find the right card to place
-		for (int j = 0; j < cAllowed.size(); j++){
+	for (unsigned int i = 0; i < cHand_.size(); i++){	//find the right card to place
+		for (unsigned int j = 0; j < cAllowed.size(); j++){
 			if (cHand_.at(i) == cAllowed.at(j)){
 				if (rR.checkPlay(*this, cHand_.at(i))){
 					cout<<"Player "<<iPlayerId_<<" plays "<<cHand_.at(i)<<endl;
@@ -94,7 +103,7 @@ bool CompPlayer::discard(Referee& rR, Card& cCard){
 
 //private member function to check if a card is in the player's hand
 bool Player::checkInHand(Card& cCard){
-	for (int i = 0; i < cHand_.size(); i++){
+	for (unsigned int i = 0; i < cHand_.size(); i++){
 		if (cCard == cHand_.at(i))
 			return true;
 	}
@@ -103,7 +112,7 @@ bool Player::checkInHand(Card& cCard){
 
 //removes the corresponding card from hand;
 void Player::removeFromHand(Card& cCard){
-	for (int i = 0; i < cHand_.size(); i++){
+	for (unsigned int i = 0; i < cHand_.size(); i++){
 		if (cCard == cHand_.at(i))
 			cHand_.erase(cHand_.begin()+i);
 	}

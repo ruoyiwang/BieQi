@@ -5,23 +5,25 @@
 #include <vector>
 
 class Table{
+friend class Referee;
+
 public:
 	Table();
-	~Table();
 	std::vector<Card> cHearts();
 	std::vector<Card> cClubs();
 	std::vector<Card> cDiamonds();
 	std::vector<Card> cSpades();
 
+	std::vector<Card> getDeck();
 	void placeCard(Card);
 private:
 	class Deck{
-	public:
-		Deck();
-		~Deck();
-		std::vector<Card> cCards;
-	private:
-		std::vector<Card> cCards_;	
+		friend class Referee;
+		public:
+			Deck();
+			std::vector<Card> cCards();
+		private:
+			std::vector<Card> cCards_;	
 	};
 	
 	Deck Deck_;
