@@ -2,17 +2,9 @@
 #include "Player.h"
 
 #include <vector>
-
+#include <iostream>
 
 using namespace std;
-
-bool Referee::checkPlay(Player& p, Card& c){
-	return true;
-}
-
-bool Referee::checkDiscard(Player& p, Card& c){
-	return true;
-}
 
 namespace{
 
@@ -34,7 +26,7 @@ void legalPlaysForOneSuit (vector<Card> suit, Suit suitType,  vector<Card>&legal
 		return;
 	}
 	Rank firstCardRank = (*suit.begin()).getRank();
-	Rank lastCardRank = (*suit.end()).getRank();
+	Rank lastCardRank = suit.back().getRank();
 
 	if (firstCardRank !=ACE)
 		legalPlays.push_back (Card(suitType, static_cast<Rank>(firstCardRank-1)));
@@ -42,6 +34,7 @@ void legalPlaysForOneSuit (vector<Card> suit, Suit suitType,  vector<Card>&legal
 	if (lastCardRank != KING)
 		legalPlays.push_back((Card(suitType, static_cast<Rank>(lastCardRank+1))));
 }
+
 
 }
 
@@ -86,7 +79,91 @@ vector<Card> Referee::getLegalPlays(Table& cardTable, vector<Card> hand){
 }
 
 
-bool Referee::checkGameEnd(){
-	return true;
+bool Referee::checkRoundEnd(Table& cardTable, vector<Player*> playerList){
+	if (cardPlayed == 52)
+	{
+		for (unsigned int i = 0; i < playerList.size(); i++){
+			Player* curPlayer = playerList[i];
+			vector<Card> discards = curPlayer->cDiscarded_;
+
+			cout << "Player <" << curPlayer->iPlayerId_ << ">'s discards:";
+			int newScore = 0;
+			for (unsigned int j = 0 ; j < discards.size();j++){
+				cout  << " " << discards[j];
+				newScore += discards[j].getRank() + 1;
+			}
+			cout << endl;
+			cout << "Player <" <<curPlayer->iPlayerId_<< ">'s score: " <<curPlayer->iScore_<< " + " << newScore << " = " << curPlayer->iScore_+newScore <<endl;
+
+			curPlayer->iScore_ = curPlayer->iScore_ + newScore;
+			
+			// empty discards list for next round
+			while(curPlayer->cDiscarded_.size()!=0)
+				curPlayer->cDiscarded_.pop_back();
+		}
+		return true;
+	}
+	else
+		return false;
+}
+
+
+bool Referee::checkGameEnd(vector<Player*> playerList){
+	int minScore = 80;
+	bool gameEndFlag = false;
+	for (unsigned int i = 0 ; i < playerList.size();i++){
+		Player* curPlayer = playerList[i];
+		int playerScore = curPlayer->iScore_;
+
+		if(playerScore >= 80){
+			gameEndFlag = true;
+			continue;
+		}
+
+		minScore = min(minScore, playerScore);
+	}
+
+	if (gameEndFlag){
+		for (unsigned int i = 0 ; i < playerList.size(); i++){
+			Player* curPlayer = playerList[i];
+			if (minScore == curPlayer->iScore_)
+				cout << "Player <"<<curPlayer->iPlayerId_<<"> wins!"<<endl;
+		}
+	}
+
+	return gameEndFlag;
+}
+
+void Referee::placeCardHelper(Card placingCard, vector<Card>& suit){
+	if (placingCard.getRank() >= SEVEN)
+		suit.push_back(placingCard);
+	else
+		suit.insert(suit.begin() , placingCard);
+}
+
+void Referee::placeCard(Card placingCard, Table& cardTable){
+	switch (placingCard.getSuit()){
+		case CLUB:
+			placeCardHelper ( placingCard,cardTable.cClubs_);
+			break;
+		case DIAMOND:
+			placeCardHelper ( placingCard,cardTable.cDiamonds_);
+			break;
+		case HEART:
+			placeCardHelper ( placingCard,cardTable.cHearts_);
+			break;
+		case SPADE:
+			placeCardHelper ( placingCard,cardTable.cSpades_);
+			break;
+		default:
+			break;
+	}
+
+	cardPlayed++;
+}
+
+void Referee::discardCard(Card discardingCard, Player* player){
+	player->cDiscarded_.push_back(discardingCard);
+	cardPlayed++;
 }
 

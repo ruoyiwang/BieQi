@@ -7,7 +7,7 @@
 
 using namespace std;
 
-Player::Player(int iPlayerId):iPlayerId_(iPlayerId){}
+Player::Player(int iPlayerId):iPlayerId_(iPlayerId),iScore_(0){}
 
 Player::~Player(){}
 
@@ -30,13 +30,9 @@ bool HumanPlayer::play(Table& tTable, Referee& rR, Card& cCard){
 		cout<<"This is not a legal play."<<endl;
 		return false;
 	}
-	//check with ref
-	if (rR.checkPlay(*this, cCard)){	//if true then remove from hand, ref will put card on table
-		removeFromHand(cCard);
-		return true;
-	}
-	else
-		return false;
+	removeFromHand(cCard);
+	rR.placeCard(cCard, tTable);
+	return true;
 }
 
 bool HumanPlayer::discard(Referee& rR, Card& cCard){
@@ -46,46 +42,25 @@ bool HumanPlayer::discard(Referee& rR, Card& cCard){
 		cout<<"This is not a legal play."<<endl;
 		return false;
 	}
-	//check with ref, too see if player is not lying
-	if (rR.checkDiscard(*this, cCard)){	//if true then remove from hand, ref will put card on table
-		removeFromHand(cCard);
-		return true;
-	}
-	else
-		return false;
+
+	removeFromHand(cCard);
+	rR.discardCard(cCard, this);
+	return true;
 }
 
 bool CompPlayer::play(Table& tTable, Referee& rR, Card& cCard){
 	string sTemp;
 	//locate all 8 possible cards+
-	vector<Card> cAllowed;
-	if ((tTable.cHearts().at(0).getRank()-1)>0)
-		cAllowed.push_back(Card(tTable.cHearts().at(0).getSuit(), Rank((tTable.cHearts().at(0).getRank()-1))));
-	if ((tTable.cHearts().at(12).getRank()+1)<13)
-		cAllowed.push_back(Card(tTable.cHearts().at(0).getSuit(), Rank((tTable.cHearts().back().getRank()+1))));
-
-	if ((tTable.cClubs().at(0).getRank()-1)>0)
-		cAllowed.push_back(Card(tTable.cClubs().at(0).getSuit(), Rank((tTable.cClubs().at(0).getRank()-1))));
-	if ((tTable.cClubs().at(12).getRank()+1)<13)
-		cAllowed.push_back(Card(tTable.cClubs().at(0).getSuit(), Rank((tTable.cClubs().back().getRank()+1))));
-
-	if ((tTable.cDiamonds().at(0).getRank()-1)>0)
-		cAllowed.push_back(Card(tTable.cDiamonds().at(0).getSuit(), Rank((tTable.cDiamonds().at(0).getRank()-1))));
-	if ((tTable.cDiamonds().at(12).getRank()+1)<13)
-		cAllowed.push_back(Card(tTable.cDiamonds().at(0).getSuit(), Rank((tTable.cDiamonds().back().getRank()+1))));
-
-	if ((tTable.cSpades().at(0).getRank()-1)>0)
-		cAllowed.push_back(Card(tTable.cSpades().at(0).getSuit(), Rank((tTable.cSpades().at(0).getRank()-1))));
-	if ((tTable.cSpades().at(12).getRank()+1)<13)
-		cAllowed.push_back(Card(tTable.cSpades().at(0).getSuit(), Rank((tTable.cSpades().back().getRank()+1))));
+	vector<Card> cAllowed = rR.getLegalPlays(tTable, cHand());
 	
 	for (unsigned int i = 0; i < cHand_.size(); i++){	//find the right card to place
 		for (unsigned int j = 0; j < cAllowed.size(); j++){
 			if (cHand_.at(i) == cAllowed.at(j)){
-				if (rR.checkPlay(*this, cHand_.at(i))){
-					cout<<"Player "<<iPlayerId_<<" plays "<<cHand_.at(i)<<endl;
-					return true;
-				}
+				cCard = cHand_.at(i);
+				cout<<"Player "<<iPlayerId_<<" plays "<<cCard<<endl;
+				cHand_.erase(cHand_.begin() + i);
+				rR.placeCard(cCard, tTable);
+				return true;
 			}
 		}
 	}
@@ -93,12 +68,10 @@ bool CompPlayer::play(Table& tTable, Referee& rR, Card& cCard){
 }
 
 bool CompPlayer::discard(Referee& rR, Card& cCard){
-	if(rR.checkDiscard(*this, cCard)){
-		cout<<"Player "<<iPlayerId_<<" discards "<<cCard<<endl;
-		cHand_.erase(cHand_.begin());
-		return true;
-	}
-	return false;
+	cout<<"Player "<<iPlayerId_<<" discards "<<cCard<<endl;
+	rR.discardCard(cCard, this);
+	cHand_.erase(cHand_.begin());
+	return true;
 }
 
 //private member function to check if a card is in the player's hand

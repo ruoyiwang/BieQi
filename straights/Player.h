@@ -17,6 +17,7 @@ public:
 	std::vector<Card> cHand();
 protected:
 	std::vector<Card> cHand_;
+	std::vector<Card> cDiscarded_;
 	int iScore_;
 	int iPlayerId_;
 	bool checkInHand(Card&);

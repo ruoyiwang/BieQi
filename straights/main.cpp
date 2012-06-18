@@ -40,7 +40,7 @@ void printCardList(vector<Card> suit){
 	"7", "8", "9", "10", "J", "Q", "K"};
 	
 	for (unsigned int i = 0 ; i < suit.size();i++)
-		cout <<  " "  << ranks[suit[i].getRank()]  <<endl; 
+		cout <<  " "  << ranks[suit[i].getRank()]; 
 }
 
 // prints out cards currently on the table
@@ -58,7 +58,7 @@ void pirntTableStatus(Table& cardTable){
 	cout<<endl;
 
 	cout << "Spades:";
-	printCardList(cardTable.cClubs());
+	printCardList(cardTable.cSpades());
 	cout<<endl;
 }
 
@@ -119,7 +119,7 @@ void humanPlayerGamePlay(Player* player, Table& cardTable, Referee& referee){
 					cout << "You have a legal play. You may not discard."<<endl;
 					break;
 				}
-				cmdFlag = player->discard(cardTable, referee, cmd.card);
+				cmdFlag = player->discard(referee, cmd.card);
 				break;
 			case DECK:
 				printDeck(cardTable);
@@ -144,6 +144,8 @@ void gamePlay(Player* player, Table& cardTable, Referee& referee){
 	else player->play(cardTable, referee, Card(CLUB,ACE)); // computerPlayer pass in a dummy card
 }
 
+vector<Player*> playerList;
+
 int main(int argc, char* argv[]){
 	if (argc > 1){
 		int randSeed;
@@ -152,28 +154,30 @@ int main(int argc, char* argv[]){
 		srand(randSeed);
 	}
 
-	vector<Player*> playerList;
-	Table cardTable;
-	Referee referee;
-
 	// 1. Invite Players
 	for(int i = 0; i<4;i++)
 		playerList.push_back( invitePlayer(i+1));
-	
-	// 2. Shufﬂing and Dealing
-	int startingPlayerId  = referee.dealing(cardTable, playerList) + 1; //referee.dealing() returns the player with 7 of spades
 
-	cout <<"A new round begins. It’s player <"<< startingPlayerId <<">’s turn to play."<<endl;
-	// sort playList with the player with 7 of spades at first
-	vector<Player*> gamePlayerList = sortPlayerList( playerList, startingPlayerId -1); // playerid - 1 = player's pos in vector
-		
-	// 3. Gameplay
 	while (true){
-		for (int i = 0 ; i < 4; i++)
-			gamePlay(gamePlayerList[i], cardTable, referee);
+		Table cardTable;
+		Referee referee;
+	
+		// 2. Shufﬂing and Dealing
+		int startingPlayerId  = referee.dealing(cardTable, playerList) + 1; //referee.dealing() returns the player with 7 of spades
 
-		if (referee.checkGameEnd())
+		cout <<"A new round begins. It's player <"<< startingPlayerId <<">'s turn to play."<<endl;
+		// sort playList with the player with 7 of spades at first
+		vector<Player*> gamePlayerList = sortPlayerList( playerList, startingPlayerId -1); // playerid - 1 = player's pos in vector
+		
+		// 3. Gameplay
+		while (true){
+			for (int i = 0 ; i < 4; i++)
+				gamePlay(gamePlayerList[i], cardTable, referee);
+
+			if (referee.checkRoundEnd(cardTable, gamePlayerList))
+				break;
+		}
+		if (referee.checkGameEnd(gamePlayerList))
 			break;
 	}
-
 }

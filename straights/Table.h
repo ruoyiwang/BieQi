@@ -15,7 +15,6 @@ public:
 	std::vector<Card> cSpades();
 
 	std::vector<Card> getDeck();
-	void placeCard(Card);
 private:
 	class Deck{
 		friend class Referee;

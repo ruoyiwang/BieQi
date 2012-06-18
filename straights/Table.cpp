@@ -5,25 +5,6 @@ using namespace std;
 Table::Table(){
 }
 
-void Table::placeCard(Card placingCard){
-	switch (placingCard.getSuit()){
-		case CLUB:
-			cClubs_[placingCard.getRank()];
-			break;
-		case DIAMOND:
-			cDiamonds_[placingCard.getRank()];
-			break;
-		case HEART:
-			cHearts_[placingCard.getRank()];
-			break;
-		case SPADE:
-			cSpades_[placingCard.getRank()];
-			break;
-		default:
-			break;
-	}
-}
-
 vector<Card> Table::getDeck(){
 	return Deck_.cCards();
 }
