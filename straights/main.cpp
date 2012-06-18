@@ -110,6 +110,7 @@ void humanPlayerGamePlay(Player* player, Table& cardTable, Referee& referee, int
 	bool cmdFlag = false;
 	while (!cmdFlag){ // loops until a 
 		Command cmd;
+		cout << ">";
 		cin >> cmd;
 		
 		switch (cmd.type)

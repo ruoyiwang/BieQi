@@ -83,13 +83,12 @@ vector<Card> Referee::getLegalPlays(Table& cardTable, vector<Card> hand){
 	}
 
 	// decide the final legal plays according to player's hand
-	for (unsigned int i = 0 ; i < legalPlays.size();i++){
-		for (unsigned int j = 0 ; j < hand.size(); j++){
+	for (unsigned int j = 0 ; j < hand.size(); j++){
+		for (unsigned int i = 0 ; i < legalPlays.size();i++){
 			if (legalPlays[i] == hand[j] ){
 				legalPlaysInHand.push_back(hand[j]);
 				break;
 			}
-
 		}
 	}
 	
