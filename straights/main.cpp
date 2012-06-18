@@ -165,7 +165,7 @@ int main(int argc, char* argv[]){
 		int randSeed;
 		istringstream(argv[1]) >> randSeed;
 
-		srand(randSeed);
+		srand(randSeed);	//swtich to srand48 on linux
 	}
 
 	// 1. Invite Players

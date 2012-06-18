@@ -71,11 +71,16 @@ vector<Card> Referee::getLegalPlays(Table& cardTable, vector<Card> hand){
 	vector<Card> legalPlays;
 	vector<Card> legalPlaysInHand;
 
-	// find legal play for each suit
-	legalPlaysForOneSuit(cardTable.cClubs(), CLUB, legalPlays);
-	legalPlaysForOneSuit(cardTable.cDiamonds() , DIAMOND, legalPlays);
-	legalPlaysForOneSuit(cardTable.cHearts(), HEART, legalPlays);
-	legalPlaysForOneSuit(cardTable.cSpades(),SPADE, legalPlays);
+	if (cardPlayed == 0){
+		legalPlays.push_back(Card(SPADE, SEVEN));
+	}
+	else{
+		// find legal play for each suit
+		legalPlaysForOneSuit(cardTable.cClubs(), CLUB, legalPlays);
+		legalPlaysForOneSuit(cardTable.cDiamonds() , DIAMOND, legalPlays);
+		legalPlaysForOneSuit(cardTable.cHearts(), HEART, legalPlays);
+		legalPlaysForOneSuit(cardTable.cSpades(),SPADE, legalPlays);
+	}
 
 	// decide the final legal plays according to player's hand
 	for (unsigned int i = 0 ; i < legalPlays.size();i++){
@@ -87,7 +92,7 @@ vector<Card> Referee::getLegalPlays(Table& cardTable, vector<Card> hand){
 
 		}
 	}
-
+	
 	return legalPlaysInHand;
 }
 
