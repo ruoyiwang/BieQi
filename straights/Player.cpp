@@ -27,7 +27,7 @@ bool HumanPlayer::play(Table& tTable, Referee& rR, Card& cCard){
 	//check to see if card is even on hand
 	//if the card is not even in the user's hand, return right away
 	if (!checkInHand(cCard)){
-		cout<<"This is not a legal play."<<endl;
+		cout<<"This is not a legal play."<<"."<<endl;
 		return false;
 	}
 	// asks referee to help place the card on table
@@ -41,7 +41,7 @@ bool HumanPlayer::discard(Referee& rR, Card& cCard){
 	//check to see if card is even on hand
 	//if the card is not even in the user's hand, return right away
 	if (!checkInHand(cCard)){
-		cout<<"This is not a legal play."<<endl;
+		cout<<"This is not a legal play."<<"."<<endl;
 		return false;
 	}
 	// asks referee to help dicard the card (referee needs to count the cards played)
@@ -60,7 +60,7 @@ bool CompPlayer::play(Table& tTable, Referee& rR, Card& cCard){
 		for (unsigned int j = 0; j < cAllowed.size(); j++){
 			if (cHand_.at(i) == cAllowed.at(j)){
 				cCard = cHand_.at(i);
-				cout<<"Player "<<iPlayerId_<<" plays "<<cCard<<endl;
+				cout<<"Player "<<iPlayerId_<<" plays "<<cCard<<"."<<endl;
 				rR.placeCard(cCard, tTable);// places the card
 				cHand_.erase(cHand_.begin() + i); // remove card on player's side
 				return true;
@@ -71,7 +71,7 @@ bool CompPlayer::play(Table& tTable, Referee& rR, Card& cCard){
 }
 
 bool CompPlayer::discard(Referee& rR, Card& cCard){
-	cout<<"Player "<<iPlayerId_<<" discards "<<cCard<<endl;
+	cout<<"Player "<<iPlayerId_<<" discards "<<cCard<<"."<<endl;
 	rR.discardCard(cCard, this);
 	cHand_.erase(cHand_.begin());
 	return true;
