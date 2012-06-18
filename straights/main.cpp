@@ -2,6 +2,7 @@
 #include <string>
 #include <iostream>
 #include <vector>
+#include <stdlib.h>
 
 #include "Command.h"
 #include "Table.h"
@@ -17,7 +18,8 @@ Player* invitePlayer(int i){
 	string command;
 
 	while (1){
-		cout << "Is player "<<  i <<"  a human(h) or a computer(c)?" << endl;
+		cout << "Is player "<<  i <<" a human(h) or a computer(c)?" << endl;
+		cout << ">";
 		cin >> command;
 
 		if (command[0] == 'c')
@@ -69,13 +71,13 @@ void pirntTableStatus(Table& cardTable){
 vector<Card> printPlayerStatus(Player* player, Table& cardTable, Referee& referee){
 	vector<Card> hand = player->cHand();
 	cout << "Your hand:";
-	for (int i =0 ; i < hand.size();i++)
+	for (unsigned int i =0 ; i < hand.size();i++)
 		cout << " " << hand[i];
 	cout << endl;
 
 	cout << "Legal plays:";
 	vector<Card> legalPlays = referee.getLegalPlays(cardTable, player->cHand()); // get legal plays from referee
-	for (int i = 0 ; i < legalPlays.size();i++)
+	for (unsigned int i = 0 ; i < legalPlays.size();i++)
 		cout << " " << legalPlays[i];
 	cout << endl;
 
@@ -84,7 +86,7 @@ vector<Card> printPlayerStatus(Player* player, Table& cardTable, Referee& refere
 
 void printDeck(Table& cardTable){
 	vector<Card> deck = cardTable.getDeck();
-	for (int i = 0 ; i < deck.size(); i++){
+	for (unsigned int i = 0 ; i < deck.size(); i++){
 		cout << deck[i] << " ";
 		if ( (i+1) % 13 == 0)
 			cout << endl;
@@ -102,7 +104,6 @@ bool testValidPaly(Card playCard, vector<Card> legalPlay){
 }
 
 void humanPlayerGamePlay(Player* player, Table& cardTable, Referee& referee, int playerPos){
-	bool validCard = false;
 	pirntTableStatus(cardTable);
 	vector<Card> legalPlay = printPlayerStatus(player, cardTable, referee);
 
@@ -133,10 +134,10 @@ void humanPlayerGamePlay(Player* player, Table& cardTable, Referee& referee, int
 				break;
 			case RAGEQUIT:
 				player = referee.rangeQuit(player); // referee handles the angery player
-				player->play(cardTable, referee, Card(CLUB,ACE)); // excute computer play
+				player->play(cardTable, referee, cmd.card); // excute computer play
 				gamePlayerList[playerPos] = player;
 				playerList[player->iPlayerId()-1] = player;
-				cmdFlag = true; // ends the command loop
+				cmdFlag = true; // exit cmd
 				break;
 			default:
 				break;
@@ -151,7 +152,12 @@ void gamePlay(Player* player, Table& cardTable, Referee& referee, int playerPos)
 	if (castTest){
 		humanPlayerGamePlay(player, cardTable, referee, playerPos);
 	}
-	else player->play(cardTable, referee, Card(CLUB,ACE)); // computerPlayer, pass in a dummy card
+	else {
+		Card dummyCard = Card(CLUB, ACE);
+		// computerPlayer, pass in a dummy card
+		player->play(cardTable, referee, dummyCard);
+	
+	} 
 }
 
 int main(int argc, char* argv[]){
@@ -174,7 +180,7 @@ int main(int argc, char* argv[]){
 		// 2. Shufﬂing and Dealing
 		int startingPlayerId  = referee.dealing(cardTable, playerList) + 1; //referee.dealing() returns the player with 7 of spades
 
-		cout <<"A new round begins. It's player <"<< startingPlayerId <<">'s turn to play."<<endl;
+		cout <<">A new round begins. It's player <"<< startingPlayerId <<">'s turn to play."<<endl;
 		// sort playList with the player with 7 of spades at first
 		gamePlayerList = sortPlayerList( playerList, startingPlayerId -1); // playerid - 1 = player's pos in vector
 		

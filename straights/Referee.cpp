@@ -1,6 +1,8 @@
 #include "Referee.h"
 #include "Player.h"
 
+#include <cstdlib>
+#include <stdlib.h>
 #include <vector>
 #include <iostream>
 
@@ -12,6 +14,7 @@ void shuffle(vector<Card>& deck){
 	int n = 52;
 	while ( n > 1 ) {
 		//int k = (int) (lrand48() % n);
+		//cout << k <<endl;
 		int k = (int) (rand()%n);
 		--n;
 		Card c = deck[n];
@@ -45,7 +48,7 @@ void legalPlaysForOneSuit (vector<Card> suit, Suit suitType,  vector<Card>&legal
 
 // referee hands out the cards to players
 int Referee::dealing(Table& cardTable, vector<Player*>playerList){
-	shuffle(cardTable.Deck_.cCards_ ); // shuffle function
+	shuffle(cardTable.Deck_.cCards_); // shuffle function
 	int ret = 0; // ret value which will be the player who has 7 of spades
 
 	for (int i = 0 ; i < 4 ; i++){

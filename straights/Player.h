@@ -27,16 +27,16 @@ protected:
 class HumanPlayer:public Player{
 public:
 	HumanPlayer(int);
-	bool HumanPlayer::play(Table&, Referee&, Card&);		//asks the user for input on which card to play
-	bool discard(Referee& rR, Card&);
+	bool play(Table&, Referee&, Card&);		//asks the user for input on which card to play
+	bool discard(Referee&, Card&);
 };
 
 class CompPlayer:public Player{
 public:
 	CompPlayer(int);
 	CompPlayer(HumanPlayer*);
-	bool CompPlayer::play(Table&, Referee&, Card&);
-	bool discard(Referee& rR, Card&);
+	bool play(Table&, Referee&, Card&);
+	bool discard(Referee& , Card&);
 };
 
 #endif
