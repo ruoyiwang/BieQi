@@ -75,7 +75,7 @@ vector<Card> printPlayerStatus(Player* player, Table& cardTable, Referee& refere
 		cout << " " << hand[i];
 	cout << endl;
 
-	cout << "Legal plays:";
+	cout << "Legal Plays:";
 	vector<Card> legalPlays = referee.getLegalPlays(cardTable, player->cHand()); // get legal plays from referee
 	for (unsigned int i = 0 ; i < legalPlays.size();i++)
 		cout << " " << legalPlays[i];
@@ -134,7 +134,7 @@ void humanPlayerGamePlay(Player* player, Table& cardTable, Referee& referee, int
 				exit(1);
 				break;
 			case RAGEQUIT:
-				player = referee.rangeQuit(player); // referee handles the angery player
+				player = referee.rageQuit(player); // referee handles the angery player
 				player->play(cardTable, referee, cmd.card); // excute computer play
 				gamePlayerList[playerPos] = player;
 				playerList[player->iPlayerId()-1] = player;
@@ -169,14 +169,28 @@ int main(int argc, char* argv[]){
 		srand(randSeed);	//swtich to srand48 on linux
 	}
 
+	
+	//if (argc > 1){
+	//	int randSeed;
+	//	istringstream(argv[1]) >> randSeed;
+
+	//	srand48(randSeed);	//swtich to srand48 on linux
+	//}
+	//else
+	//	srand48(0);
+
+
 	// 1. Invite Players
 	for(int i = 0; i<4;i++)
 		playerList.push_back( invitePlayer(i+1));
 
+	
+	Table cardTable;
+
 	// game loop
 	while (true){
-		Table cardTable;
 		Referee referee;
+		referee.clearTable(cardTable);
 	
 		// 2. Shufﬂing and Dealing
 		int startingPlayerId  = referee.dealing(cardTable, playerList) + 1; //referee.dealing() returns the player with 7 of spades

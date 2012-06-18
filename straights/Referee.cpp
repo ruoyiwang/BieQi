@@ -105,6 +105,8 @@ bool Referee::checkRoundEnd(Table& cardTable, vector<Player*> playerList){
 			vector<Card> discards = curPlayer->cDiscarded_;
 
 			cout << "Player " << curPlayer->iPlayerId_ << "'s discards:";
+			if (discards.size() == 0)	//per output by the provided program
+				cout<<" ";
 			int newScore = 0;
 			// print discards & calculate scores
 			for (unsigned int j = 0 ; j < discards.size();j++){
@@ -194,11 +196,11 @@ void Referee::discardCard(Card discardingCard, Player* player){
 }
 
 
-Player* Referee::rangeQuit(Player*& humanPlayer){
+Player* Referee::rageQuit(Player*& humanPlayer){
 	Player* curHumPlayer = humanPlayer;
 	Player* newCompPlayer = new CompPlayer(humanPlayer->iPlayerId_);
 
-	cout << "Player <"<<humanPlayer->iPlayerId_<<"> ragequits. A computer will now take over." << endl;
+	cout << "Player "<<humanPlayer->iPlayerId_<<" ragequits. A computer will now take over." << endl;
 	for (unsigned int i = 0 ; i< humanPlayer->cHand_.size();i++)
 		newCompPlayer->cHand_.push_back(humanPlayer->cHand_[i]);
 
@@ -210,4 +212,11 @@ Player* Referee::rangeQuit(Player*& humanPlayer){
 	delete curHumPlayer;
 	
 	return humanPlayer;
+}
+
+void Referee::clearTable(Table& t){
+	t.cClubs_.clear();
+	t.cSpades_.clear();
+	t.cHearts_.clear();
+	t.cDiamonds_.clear();
 }

@@ -13,7 +13,8 @@ public:
 	std::vector<Card> getLegalPlays(Table&, std::vector<Card>);
 	void placeCard(Card, Table&);
 	void discardCard(Card, Player*);
-	Player* rangeQuit(Player*&);
+	Player* rageQuit(Player*&);
+	void clearTable(Table&);
 private:
 	void placeCardHelper(Card, std::vector<Card>&);
 	int cardPlayed;

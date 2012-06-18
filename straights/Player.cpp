@@ -32,6 +32,7 @@ bool HumanPlayer::play(Table& tTable, Referee& rR, Card& cCard){
 	}
 	// asks referee to help place the card on table
 	rR.placeCard(cCard, tTable);
+	cout<<"Player "<<iPlayerId_<<" plays "<<cCard<<"."<<endl;
 	// remove the card from the player's pointer of view
 	removeFromHand(cCard);
 	return true;
