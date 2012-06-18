@@ -14,7 +14,7 @@ Player* invitePlayer(int i){
 	string command;
 
 	while (1){
-		cout << "Is player "<<  i <<"  a human(h) or a computer(c)?" << endl;
+		cout << "Is player "<<  i <<" a human(h) or a computer(c)?" << endl;
 		cin >> command;
 
 		if (command[0] == 'c')
@@ -168,7 +168,7 @@ int main(int argc, char* argv[]){
 		// 2. Shufﬂing and Dealing
 		int startingPlayerId  = referee.dealing(cardTable, playerList) + 1; //referee.dealing() returns the player with 7 of spades
 
-		cout <<"A new round begins. It's player <"<< startingPlayerId <<">'s turn to play."<<endl;
+		cout <<"A new round begins. It's player "<< startingPlayerId <<"'s turn to play."<<endl;
 		// sort playList with the player with 7 of spades at first
 		vector<Player*> gamePlayerList = sortPlayerList( playerList, startingPlayerId -1); // playerid - 1 = player's pos in vector
 		

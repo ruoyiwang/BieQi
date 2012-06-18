@@ -97,7 +97,7 @@ bool Referee::checkRoundEnd(Table& cardTable, vector<Player*> playerList){
 			Player* curPlayer = playerList[i];
 			vector<Card> discards = curPlayer->cDiscarded_;
 
-			cout << "Player <" << curPlayer->iPlayerId_ << ">'s discards:";
+			cout << "Player " << curPlayer->iPlayerId_ << "'s discards:";
 			int newScore = 0;
 			// print discards & calculate scores
 			for (unsigned int j = 0 ; j < discards.size();j++){
@@ -105,7 +105,7 @@ bool Referee::checkRoundEnd(Table& cardTable, vector<Player*> playerList){
 				newScore += discards[j].getRank() + 1;
 			}
 			cout << endl;
-			cout << "Player <" <<curPlayer->iPlayerId_<< ">'s score: " <<curPlayer->iScore_<< " + " << newScore << " = " << curPlayer->iScore_+newScore <<endl;
+			cout << "Player " <<curPlayer->iPlayerId_<< "'s score: " <<curPlayer->iScore_<< " + " << newScore << " = " << curPlayer->iScore_+newScore <<endl;
 			// add score to player
 			curPlayer->iScore_ = curPlayer->iScore_ + newScore;
 			
@@ -142,7 +142,7 @@ bool Referee::checkGameEnd(vector<Player*> playerList){
 			Player* curPlayer = playerList[i];
 			// print out winner(s)
 			if (minScore == curPlayer->iScore_)
-				cout << "Player <"<<curPlayer->iPlayerId_<<"> wins!"<<endl;
+				cout << "Player "<<curPlayer->iPlayerId_<<" wins!"<<endl;
 		}
 	}
 
