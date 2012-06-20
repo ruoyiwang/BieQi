@@ -18,6 +18,8 @@ public:
 	void discardCard(Card, Player*); // help player discards the card
 	Player* rageQuit(Player*&); // handles angray players
 	void clearTable(Table&); // empty the cards on the table
+
+	static bool checkValidPaly(Card , std::vector<Card> ); // check if the card is a valid play
 private:
 	void placeCardHelper(Card, std::vector<Card>&);
 	int cardPlayed; // keeps track of card played

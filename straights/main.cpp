@@ -93,15 +93,6 @@ void printDeck(Table& cardTable){
 	}
 }
 
-// test if the card is a legal play
-bool testValidPaly(Card playCard, vector<Card> legalPlay){
-	for (unsigned int i = 0 ;  i < legalPlay.size(); i++){
-		if(playCard == legalPlay[i])
-			return true;
-	}
-	cout << "This is not a legal play." <<endl;
-	return false;
-}
 
 void humanPlayerGamePlay(Player* player, Table& cardTable, Referee& referee, int playerPos){
 	pirntTableStatus(cardTable);
@@ -116,7 +107,7 @@ void humanPlayerGamePlay(Player* player, Table& cardTable, Referee& referee, int
 		switch (cmd.type)
 		{
 			case PLAY:
-				if (testValidPaly(cmd.card, legalPlay)){
+				if (referee.checkValidPaly(cmd.card, legalPlay)){
 					cmdFlag = player->play(cardTable, referee, cmd.card);
 				}
 				break;

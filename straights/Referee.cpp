@@ -206,12 +206,22 @@ Player* Referee::rageQuit(Player*& humanPlayer){
 
 	for (unsigned int i = 0 ; i< humanPlayer->cDiscarded_.size();i++)
 		newCompPlayer->cDiscarded_.push_back(humanPlayer->cDiscarded_[i]);
-
+	
 	newCompPlayer->iScore_ = humanPlayer->iScore_;
 	humanPlayer = newCompPlayer;
 	delete curHumPlayer;
 	
 	return humanPlayer;
+}
+
+// test if the card is a legal play
+bool Referee::checkValidPaly(Card playCard, vector<Card> legalPlay){
+	for (unsigned int i = 0 ;  i < legalPlay.size(); i++){
+		if(playCard == legalPlay[i])
+			return true;
+	}
+	cout << "This is not a legal play." <<endl;
+	return false;
 }
 
 void Referee::clearTable(Table& t){
