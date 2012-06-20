@@ -13,15 +13,15 @@ public:
 	~Player();
 	virtual bool play(Table&, Referee&, Card&) = 0;	
 	virtual bool discard(Referee&, Card&) = 0;
-	int iPlayerId(); // accessor
-	std::vector<Card> cHand(); // accessor for main, used to print hand
+	int iPlayerId() const ; // accessor
+	std::vector<Card> cHand() const; // accessor for main, used to print hand
 protected:
 	std::vector<Card>* getcHand();	// special accessor for CompPlayer, because compPlayer need to modify hand
 	bool checkInHand(Card&);
 	void removeFromHand(Card&);
 private:
-	std::vector<Card> cHand_;
-	std::vector<Card> cDiscarded_;
+	std::vector<Card> cHand_; // hand 
+	std::vector<Card> cDiscarded_; // vector of discards
 	int iPlayerId_;
 	int iScore_;
 

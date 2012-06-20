@@ -11,11 +11,11 @@ Player::Player(int iPlayerId):iPlayerId_(iPlayerId),iScore_(0){}
 
 Player::~Player(){}
 
-int Player::iPlayerId(){
+int Player::iPlayerId()const{
 	return iPlayerId_;
 }
 
-vector<Card> Player::cHand(){
+vector<Card> Player::cHand() const{
 	return cHand_;
 }
 

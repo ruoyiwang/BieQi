@@ -10,10 +10,10 @@ friend class Referee;
 public:
 	Table();
 	// accessors
-	std::vector<Card> cHearts(); 
-	std::vector<Card> cClubs();
-	std::vector<Card> cDiamonds();
-	std::vector<Card> cSpades();
+	std::vector<Card> cHearts() const; 
+	std::vector<Card> cClubs() const;
+	std::vector<Card> cDiamonds() const;
+	std::vector<Card> cSpades()const;
 	std::vector<Card> getDeck();
 private:
 	// a private class, we think that deck only appears on the table
@@ -21,7 +21,7 @@ private:
 		friend class Referee;
 		public:
 			Deck();
-			std::vector<Card> cCards();
+			std::vector<Card> cCards() const;
 		private:
 			std::vector<Card> cCards_;	
 	};

@@ -9,18 +9,18 @@ vector<Card> Table::getDeck(){
 	return Deck_.cCards();
 }
 
-vector<Card> Table::cHearts(){
+vector<Card> Table::cHearts()const{
 	return cHearts_;
 }
 
-vector<Card> Table::cClubs(){
+vector<Card> Table::cClubs()const{
 	return cClubs_;
 }
-vector<Card> Table::cDiamonds(){
+vector<Card> Table::cDiamonds()const{
 	return cDiamonds_;
 }
 
-vector<Card> Table::cSpades(){
+vector<Card> Table::cSpades()const{
 	return cSpades_;
 }
 
@@ -32,7 +32,7 @@ Table::Deck::Deck(){
 			cCards_.push_back(Card( static_cast<Suit>(suit), static_cast<Rank>(rank)));
 }
 
-vector<Card> Table::Deck::cCards(){
+vector<Card> Table::Deck::cCards()const{
 	return cCards_;
 }
 

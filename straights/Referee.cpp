@@ -1,5 +1,6 @@
 #include "Referee.h"
 #include "Player.h"
+#include "Card.h"
 
 #include <cstdlib>
 #include <stdlib.h>
@@ -11,7 +12,7 @@ using namespace std;
 namespace{
 
 void shuffle(vector<Card>& deck){
-	int n = 52;
+	int n = CARD_COUNT;
 	while ( n > 1 ) {
 		//int k = (int) (lrand48() % n);
 		//cout << k <<endl;
@@ -52,7 +53,7 @@ int Referee::dealing(Table& cardTable, vector<Player*>playerList){
 	int ret = 0; // ret value which will be the player who has 7 of spades
 
 	for (int i = 0 ; i < 4 ; i++){
-		for (int j = i*13 ; j < (i+1)*13; j++){
+		for (int j = i*RANK_COUNT ; j < (i+1)*RANK_COUNT; j++){
 			Card curCard = cardTable.Deck_.cCards_[j];
 
 			// test if the card is 7 of spades
@@ -96,9 +97,9 @@ vector<Card> Referee::getLegalPlays(Table& cardTable, vector<Card> hand){
 }
 
 
-bool Referee::checkRoundEnd(Table& cardTable, vector<Player*> playerList){
-	// if cardPlayed == 52 means all cards are used (including play/discard)
-	if (cardPlayed == 52)
+bool Referee::checkRoundEnd(Table& cardTable, vector<Player*> playerList)const{
+	// if cardPlayed == CARD_COUNT means all cards are used (including play/discard)
+	if (cardPlayed == CARD_COUNT)
 	{
 		for (unsigned int i = 0; i < playerList.size(); i++){
 			Player* curPlayer = playerList[i];
@@ -129,7 +130,7 @@ bool Referee::checkRoundEnd(Table& cardTable, vector<Player*> playerList){
 }
 
 
-bool Referee::checkGameEnd(vector<Player*> playerList){
+bool Referee::checkGameEnd(vector<Player*> playerList)const{
 	int minScore = playerList[0]->iScore_;
 	bool gameEndFlag = false;
 	// check sroce on each player
