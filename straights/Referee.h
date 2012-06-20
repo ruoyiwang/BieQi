@@ -7,7 +7,13 @@
 const int CARD_COUNT = 52;
 
 /**
-
+Referee is created due to the fact that players may cheat and therefore unfair for the player to check if
+	the card being played if valid or not, from an OOD point of view
+There fore the Referee class is made to validate and count the players scores as well as deciding if the game
+	and round would end. Moreover, the referee class is also there to shuffle as the card dealer in real life
+	would do and the referee class would deal the cards to the players.
+Which, by doing this (adding the referee class, there will be no exceptions(threat) which the players can 
+	create to the game.
 **/
 class Referee{
 public:
