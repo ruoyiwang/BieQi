@@ -4,19 +4,22 @@
 #include "Card.h"
 #include "Player.h"
 
+/**
+
+**/
 class Referee{
 public:
-	Referee():cardPlayed(0){};
-	bool checkGameEnd(std::vector<Player*>);
-	bool checkRoundEnd(Table&, std::vector<Player*>);
+	Referee():cardPlayed(0){}; // constructor, with cardPlayed inited as 0
+	bool checkGameEnd(std::vector<Player*>); // check if game ends
+	bool checkRoundEnd(Table&, std::vector<Player*>); // check if round ends
 	int dealing(Table&, std::vector<Player*>);	// returns the player with 7 of spades
-	std::vector<Card> getLegalPlays(Table&, std::vector<Card>);
-	void placeCard(Card, Table&);
-	void discardCard(Card, Player*);
-	Player* rageQuit(Player*&);
-	void clearTable(Table&);
+	std::vector<Card> getLegalPlays(Table&, std::vector<Card>); // returns legal play for main&player
+	void placeCard(Card, Table&); // help player place the card on the table
+	void discardCard(Card, Player*); // help player discards the card
+	Player* rageQuit(Player*&); // handles angray players
+	void clearTable(Table&); // empty the cards on the table
 private:
 	void placeCardHelper(Card, std::vector<Card>&);
-	int cardPlayed;
+	int cardPlayed; // keeps track of card played
 };
 #endif

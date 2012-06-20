@@ -32,7 +32,7 @@ bool HumanPlayer::play(Table& tTable, Referee& rR, Card& cCard){
 	}
 	// asks referee to help place the card on table
 	rR.placeCard(cCard, tTable);
-	cout<<"Player "<<iPlayerId_<<" plays "<<cCard<<"."<<endl;
+	cout<<"Player "<<iPlayerId()<<" plays "<<cCard<<"."<<endl;
 	// remove the card from the player's pointer of view
 	removeFromHand(cCard);
 	return true;
@@ -47,6 +47,7 @@ bool HumanPlayer::discard(Referee& rR, Card& cCard){
 	}
 	// asks referee to help dicard the card (referee needs to count the cards played)
 	rR.discardCard(cCard, this);
+	cout<<"Player "<<iPlayerId()<<" discards "<<cCard<<"."<<endl;
 	// remove the card from the player's pointer of view
 	removeFromHand(cCard);
 	return true;
@@ -56,25 +57,29 @@ bool CompPlayer::play(Table& tTable, Referee& rR, Card& cCard){
 	string sTemp;
 	//locate all 8 possible cards+
 	vector<Card> cAllowed = rR.getLegalPlays(tTable, cHand());
-	
-	for (unsigned int i = 0; i < cHand_.size(); i++){	//find the right card to place
+
+	vector<Card>* hand = getcHand();
+
+	for (unsigned int i = 0; i < hand->size(); i++){	//find the right card to place
 		for (unsigned int j = 0; j < cAllowed.size(); j++){
-			if (cHand_.at(i) == cAllowed.at(j)){
-				cCard = cHand_.at(i);
-				cout<<"Player "<<iPlayerId_<<" plays "<<cCard<<"."<<endl;
+			if (hand->at(i) == cAllowed.at(j)){
+				cCard = hand->at(i);
+				cout<<"Player "<<iPlayerId()<<" plays "<<cCard<<"."<<endl;
 				rR.placeCard(cCard, tTable);// places the card
-				cHand_.erase(cHand_.begin() + i); // remove card on player's side
+				hand->erase(hand->begin() + i); // remove card on player's side
 				return true;
 			}
 		}
 	}
-	return discard(rR, cHand_.at(0));
+	return discard(rR, hand->at(0));
 }
 
 bool CompPlayer::discard(Referee& rR, Card& cCard){
-	cout<<"Player "<<iPlayerId_<<" discards "<<cCard<<"."<<endl;
+	vector<Card>* hand = getcHand();
+
+	cout<<"Player "<<iPlayerId()<<" discards "<<cCard<<"."<<endl;
 	rR.discardCard(cCard, this);
-	cHand_.erase(cHand_.begin());
+	hand->erase(hand->begin());
 	return true;
 }
 
@@ -93,4 +98,9 @@ void Player::removeFromHand(Card& cCard){
 		if (cCard == cHand_.at(i))
 			cHand_.erase(cHand_.begin()+i);
 	}
+}
+
+// special accessor for CompPlayer, because compPlayer need to modify hand
+vector<Card>* Player::getcHand(){
+	return &cHand_;
 }

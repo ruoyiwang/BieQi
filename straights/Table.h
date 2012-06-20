@@ -9,13 +9,14 @@ friend class Referee;
 
 public:
 	Table();
-	std::vector<Card> cHearts();
+	// accessors
+	std::vector<Card> cHearts(); 
 	std::vector<Card> cClubs();
 	std::vector<Card> cDiamonds();
 	std::vector<Card> cSpades();
-
 	std::vector<Card> getDeck();
 private:
+	// a private class, we think that deck only appears on the table
 	class Deck{
 		friend class Referee;
 		public:
@@ -25,7 +26,7 @@ private:
 			std::vector<Card> cCards_;	
 	};
 	
-	Deck Deck_;
+	Deck Deck_; // deck on the table
 
 	// cards on the table
 	std::vector<Card> cHearts_;
