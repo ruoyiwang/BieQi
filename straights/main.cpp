@@ -151,7 +151,7 @@ void gamePlay(Player* player, Table& cardTable, Referee& referee, int playerPos)
 	
 	} 
 }
-
+/*
 int main(int argc, char* argv[]){
 	if (argc > 1){
 		int randSeed;
@@ -209,3 +209,5 @@ int main(int argc, char* argv[]){
 	for (unsigned int i = 0; i < playerList.size();i++)
 		delete playerList[i];
 }
+
+*/
