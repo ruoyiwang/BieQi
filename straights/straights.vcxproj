@@ -68,6 +68,7 @@
     <ClCompile Include="Command.cpp" />
     <ClCompile Include="DeckGUI.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Model.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Referee.cpp" />
     <ClCompile Include="shuffle.cpp" />
@@ -79,6 +80,7 @@
     <ClInclude Include="Card.h" />
     <ClInclude Include="Command.h" />
     <ClInclude Include="DeckGUI.h" />
+    <ClInclude Include="Model.h" />
     <ClInclude Include="Observer.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Referee.h" />

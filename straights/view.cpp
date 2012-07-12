@@ -9,67 +9,67 @@
 
 using namespace std;
 
-View::View() :vbMainPanel(false, 10), hbControlBox(true, 10), 
-		vbTableBox(true, 10), lblTableLabel("Cards on Table"),frmTable("Cards on Table"),  
-		hbPlayerBox(true, 10),	hbHandBox(true, 10), frmHand("Your Hand"),
-		btnGameStart("Game Start"), btnGameEnd("Game End!"), enSeed(),
-		Deck(DeckGUI()){
+View::View() :vbMainPanel_(false, 10), hbControlBox_(true, 10), 
+		vbTableBox_(true, 10), lblTableLabel_("Cards on Table"),frmTable_("Cards on Table"),  
+		hbPlayerBox_(true, 10),	hbHandBox_(true, 10), frmHand_("Your Hand"),
+		btnGameStart_("Game Start"), btnGameEnd("Game End!"), enSeed_(),
+		Deck_(DeckGUI()){
 	set_title("Straights");
 	set_border_width(20);
-	add(vbMainPanel);
+	add(vbMainPanel_);
 
-	vbMainPanel.add(hbControlBox);
-	vbMainPanel.add(frmTable);
-	vbMainPanel.add(hbPlayerBox);
-	vbMainPanel.add(frmHand);
-	frmHand.add(hbHandBox);
+	vbMainPanel_.add(hbControlBox_);
+	vbMainPanel_.add(frmTable_);
+	vbMainPanel_.add(hbPlayerBox_);
+	vbMainPanel_.add(frmHand_);
+	frmHand_.add(hbHandBox_);
 
-	hbControlBox.add(btnGameStart);
-	hbControlBox.add(enSeed);
-	hbControlBox.add(btnGameEnd);
+	hbControlBox_.add(btnGameStart_);
+	hbControlBox_.add(enSeed_);
+	hbControlBox_.add(btnGameEnd);
 	
-	lblTableLabel.set_alignment(Gtk::ALIGN_LEFT, Gtk::ALIGN_TOP);
-	frmTable.set_shadow_type(Gtk::SHADOW_ETCHED_IN);
-	frmTable.add(vbTableBox);
+	lblTableLabel_.set_alignment(Gtk::ALIGN_LEFT, Gtk::ALIGN_TOP);
+	frmTable_.set_shadow_type(Gtk::SHADOW_ETCHED_IN);
+	frmTable_.add(vbTableBox_);
 
 	for (int i = 0; i < 4; i++){
-		vbTableBox.add(hbCardBox[i]);
+		vbTableBox_.add(hbCardBox_[i]);
 
-		hbCardBox[i].set_spacing(7);
-		hbCardBox[i].set_border_width(7);
+		hbCardBox_[i].set_spacing(7);
+		hbCardBox_[i].set_border_width(7);
 
-		hbPlayerBox.add(frmPlayer[i]);
-		frmPlayer[i].add(vbPlayer[i]);
-		vbPlayer[i].add(btnPlayer[i]);
+		hbPlayerBox_.add(frmPlayer_[i]);
+		frmPlayer_[i].add(vbPlayer_[i]);
+		vbPlayer_[i].add(btnPlayer_[i]);
 
-		btnPlayer[i].set_label("Human");
-		vbPlayer[i].add(lblPlayerPoints[i]);
-		lblPlayerPoints[i].set_label("0 points");
-		vbPlayer[i].add(lblPlayerDiscards[i]);
-		lblPlayerDiscards[i].set_label("0 discards");
+		btnPlayer_[i].set_label("Human");
+		vbPlayer_[i].add(lblPlayerPoints_[i]);
+		lblPlayerPoints_[i].set_label("0 points");
+		vbPlayer_[i].add(lblPlayerDiscards_[i]);
+		lblPlayerDiscards_[i].set_label("0 discards");
 
 		char buffer [33];
 		itoa (i,buffer,10);
 		string temp = buffer;
 		string in = "Player " + temp;
-		frmPlayer[i].set_label(in);
+		frmPlayer_[i].set_label(in);
 	}
 
 	for (int i = 0; i < 13; i++){
-		imgClubs[i].set(Deck.image(ACE, HEART));
-		imgDiamonds[i].set(Deck.image(ACE, HEART));
-		imgHearts[i].set(Deck.image(ACE, HEART));
-		imgSpades[i].set(Deck.image(ACE, HEART));
-		imgHand[i].set(Deck.image(ACE, HEART));
+		imgClubs_[i].set(Deck_.image(ACE, HEART));
+		imgDiamonds_[i].set(Deck_.image(ACE, HEART));
+		imgHearts_[i].set(Deck_.image(ACE, HEART));
+		imgSpades_[i].set(Deck_.image(ACE, HEART));
+		imgHand_[i].set(Deck_.image(ACE, HEART));
 
-		btnHand[i].add(imgHand[i]);
+		btnHand_[i].add(imgHand_[i]);
 
-		hbCardBox[0].add(imgClubs[i]);
-		hbCardBox[1].add(imgDiamonds[i]);
-		hbCardBox[2].add(imgHearts[i]);
-		hbCardBox[3].add(imgSpades[i]);
+		hbCardBox_[0].add(imgClubs_[i]);
+		hbCardBox_[1].add(imgDiamonds_[i]);
+		hbCardBox_[2].add(imgHearts_[i]);
+		hbCardBox_[3].add(imgSpades_[i]);
 
-		hbHandBox.add(btnHand[i]);
+		hbHandBox_.add(btnHand_[i]);
 	}
 
 	show_all();

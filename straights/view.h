@@ -12,41 +12,41 @@ public:
 	virtual void update();
 
 private:
-	Gtk::VBox vbMainPanel;
+	Gtk::VBox vbMainPanel_;
 
-	Gtk::HBox hbControlBox;
+	Gtk::HBox hbControlBox_;
 
-	Gtk::VBox vbTableBox;
-	Gtk::HBox hbCardBox[4];
+	Gtk::VBox vbTableBox_;
+	Gtk::HBox hbCardBox_[4];
 
-	Gtk::Label lblTableLabel;
-	Gtk::Frame frmTable;
+	Gtk::Label lblTableLabel_;
+	Gtk::Frame frmTable_;
 
-	Gtk::HBox hbPlayerBox;
-	Gtk::Frame frmPlayer[4];
+	Gtk::HBox hbPlayerBox_;
+	Gtk::Frame frmPlayer_[4];
 
-	Gtk::VBox vbPlayer[4];
+	Gtk::VBox vbPlayer_[4];
 
-	Gtk::Button btnPlayer[4];
-	Gtk::Label lblPlayerPoints[4];
-	Gtk::Label lblPlayerDiscards[4];
+	Gtk::Button btnPlayer_[4];
+	Gtk::Label lblPlayerPoints_[4];
+	Gtk::Label lblPlayerDiscards_[4];
 
-	Gtk::Frame frmHand;
-	Gtk::HBox hbHandBox;
+	Gtk::Frame frmHand_;
+	Gtk::HBox hbHandBox_;
 
-	Gtk::Button btnGameStart;
-	Gtk::Entry enSeed;
+	Gtk::Button btnGameStart_;
+	Gtk::Entry enSeed_;
 	Gtk::Button btnGameEnd;
 
-	DeckGUI Deck;
+	DeckGUI Deck_;
 	
-	Gtk::Image imgClubs[13];
-	Gtk::Image imgDiamonds[13];
-	Gtk::Image imgHearts[13];
-	Gtk::Image imgSpades[13];
+	Gtk::Image imgClubs_[13];
+	Gtk::Image imgDiamonds_[13];
+	Gtk::Image imgHearts_[13];
+	Gtk::Image imgSpades_[13];
 
-	Gtk::Image imgHand[13];
-	Gtk::Button btnHand[13];
+	Gtk::Image imgHand_[13];
+	Gtk::Button btnHand_[13];
 };
 
 #endif
