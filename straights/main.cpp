@@ -4,6 +4,14 @@
 #include <vector>
 #include <stdlib.h>
 
+
+
+#include <gtkmm/main.h>
+
+#include "view.h"
+
+
+
 #include "Command.h"
 #include "Table.h"
 #include "Referee.h"
@@ -211,3 +219,12 @@ int main(int argc, char* argv[]){
 }
 
 */
+
+int main( int argc, char * argv[] ){
+	Gtk::Main  kit( argc, argv );
+	View v;
+	Gtk::Main::run(v);
+
+	return 0;
+
+}

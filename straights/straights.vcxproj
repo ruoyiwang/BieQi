@@ -33,6 +33,7 @@
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\..\..\..\..\..\..\gtkmm\MSVC\gtkmm-vc100-d-2_4.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
@@ -65,18 +66,25 @@
   <ItemGroup>
     <ClCompile Include="Card.cpp" />
     <ClCompile Include="Command.cpp" />
+    <ClCompile Include="DeckGUI.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Referee.cpp" />
     <ClCompile Include="shuffle.cpp" />
+    <ClCompile Include="Subject.cpp" />
     <ClCompile Include="Table.cpp" />
+    <ClCompile Include="view.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Card.h" />
     <ClInclude Include="Command.h" />
+    <ClInclude Include="DeckGUI.h" />
+    <ClInclude Include="Observer.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Referee.h" />
+    <ClInclude Include="Subject.h" />
     <ClInclude Include="Table.h" />
+    <ClInclude Include="view.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />
