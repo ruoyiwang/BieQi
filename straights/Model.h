@@ -15,5 +15,5 @@ public:
 	Model();
 	~Model();
 	void gameStart(bool bHuman1, bool bHuman2, bool bHuman3, bool bHuman4, int seed);
-	void gamePlay(int iCurPlayer;);
+	void gamePlay(int iCurPlayer);
 };
