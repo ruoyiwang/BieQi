@@ -16,26 +16,26 @@ private:
 	Gtk::HBox hbControlBox;
 
 	Gtk::VBox vbTableBox;
-	Gtk::HBox hbClubBox;
-	Gtk::HBox hbDiamondbBox;
-	Gtk::HBox hbHeartBox;
-	Gtk::HBox hbSpadeBox;
+	Gtk::HBox hbCardBox[4];
 
 	Gtk::Label lblTableLabel;
 	Gtk::Frame frmTable;
 
 	Gtk::HBox hbPlayerBox;
+	Gtk::Frame frmPlayer[4];
 
-	Gtk::VBox vbPlayer1;
-	Gtk::VBox vbPlayer2;
-	Gtk::VBox vbPlayer3;
-	Gtk::VBox vbPlayer4;
+	Gtk::VBox vbPlayer[4];
 
+	Gtk::Button btnPlayer[4];
+	Gtk::Label lblPlayerPoints[4];
+	Gtk::Label lblPlayerDiscards[4];
+
+	Gtk::Frame frmHand;
 	Gtk::HBox hbHandBox;
 
-	Gtk::Button btGameStart;
+	Gtk::Button btnGameStart;
 	Gtk::Entry enSeed;
-	Gtk::Button btGameEnd;
+	Gtk::Button btnGameEnd;
 };
 
 #endif
