@@ -10,26 +10,30 @@
 #include <algorithm>
 #include <iterator>
 #include <string>
+#include <iostream>
 using std::string;
 using std::transform;
 
 // Sets up an array of the Portable Network Graphics (PNG) file names that contain the necessary card images.
 // The deck will load the contents into pixel buffers for later use.
 const char * image_names[] = {   
-	// Set up NINE of {DIAMOND,CLUB,HEART,SPADE}
-	"img/0_0.png", "img/0_1.png", "img/0_2.png", "img/0_3.png",
-	// Set up TEN of {DIAMOND,CLUB,HEART,SPADE}
-	"img/1_0.png", "img/1_1.png", "img/1_2.png", "img/1_3.png",
-	// Set up JACK of {DIAMOND,CLUB,HEART,SPADE}
-	"img/2_0.png", "img/2_1.png", "img/2_2.png", "img/2_3.png",
-	// Set up QUEEN of {DIAMOND,CLUB,HEART,SPADE}
-	"img/3_0.png", "img/3_1.png", "img/3_2.png", "img/3_3.png",
-	// Set up KING of {DIAMOND,CLUB,HEART,SPADE}
-	"img/4_0.png", "img/4_1.png", "img/4_2.png", "img/4_3.png",
-	// Set up ACE of {DIAMOND,CLUB,HEART,SPADE}
-	"img/5_0.png", "img/5_1.png", "img/5_2.png", "img/5_3.png",
-	// Set up the back of a card for a place holder/null card
+
+	"img/0_0.png", "img/1_0.png", "img/2_0.png", "img/3_0.png",
+	"img/0_1.png", "img/1_1.png", "img/2_1.png", "img/3_1.png",
+	"img/0_2.png", "img/1_2.png", "img/2_2.png", "img/3_2.png",
+	"img/0_3.png", "img/1_3.png", "img/2_3.png", "img/3_3.png",
+	"img/0_4.png", "img/1_4.png", "img/2_4.png", "img/3_4.png",
+	"img/0_5.png", "img/1_5.png", "img/2_5.png", "img/3_5.png",
+	"img/0_5.png", "img/1_5.png", "img/2_5.png", "img/3_5.png",
+	"img/0_6.png", "img/1_6.png", "img/2_6.png", "img/3_6.png",
+	"img/0_7.png", "img/1_7.png", "img/2_7.png", "img/3_7.png",
+	"img/0_8.png", "img/1_8.png", "img/2_8.png", "img/3_8.png",
+	"img/0_9.png", "img/1_9.png", "img/2_9.png", "img/3_9.png",
+	"img/0_j.png", "img/1_j.png", "img/2_j.png", "img/3_j.png",
+	"img/0_q.png", "img/1_q.png", "img/2_q.png", "img/3_q.png",
+	"img/0_k.png", "img/1_k.png", "img/2_k.png", "img/3_k.png",
 	"img/nothing.png"
+	
 }; 
 
 // Loads the image from the specified file name into a pixel buffer.
@@ -44,6 +48,9 @@ DeckGUI::DeckGUI()  {
 	// added to the back of deck.
 	transform( &image_names[0], &image_names[G_N_ELEMENTS(image_names)], 
 			   std::back_inserter(deck), &createPixbuf );
+
+	//
+	
 } // DeckGUI::DeckGUI
 
 DeckGUI::~DeckGUI() {
