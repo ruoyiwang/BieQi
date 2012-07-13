@@ -50,11 +50,11 @@ View::View(Controller* c, Model* m) : controller_(c), model_(m),vbMainPanel_(fal
 
 	// cards boxes init
 	for (int i = 0; i < 13; i++){
-		imgClubs_[i].set(Deck_.image(ACE, HEART));
-		imgDiamonds_[i].set(Deck_.image(ACE, HEART));
-		imgHearts_[i].set(Deck_.image(ACE, HEART));
-		imgSpades_[i].set(Deck_.image(ACE, HEART));
-		imgHand_[i].set(Deck_.image(ACE, HEART));
+		imgClubs_[i].set(Deck_.null());
+		imgDiamonds_[i].set(Deck_.null());
+		imgHearts_[i].set(Deck_.null());
+		imgSpades_[i].set(Deck_.null());
+		imgHand_[i].set(Deck_.null());
 
 		btnHand_[i].add(imgHand_[i]);
 		btnHand_[i].signal_clicked().connect(sigc::bind( sigc::mem_fun( *this, &View::btnHandClicked ), i ));

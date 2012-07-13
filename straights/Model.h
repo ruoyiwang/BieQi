@@ -9,7 +9,7 @@
 #include "Card.h"
 #include "Subject.h"
 
-enum gameState {INGAME, ROUNDEND, GAMEEND};
+enum gameState {GAMESTART, INGAME, ROUNDEND, GAMEEND};
 
 class Model : public Subject{
 private:

@@ -27,8 +27,9 @@ void Model::gameStart(bool bHuman1, bool bHuman2, bool bHuman3, bool bHuman4, in
 	cout <<"A new round begins. It's player "<< startingPlayerId <<"'s turn to play."<<endl;
 	gamePlayerList_ = sortPlayerList(startingPlayerId -1); // playerid - 1 = player's pos in vector
 
+	setCurrentState(GAMESTART);
+	notify();
 	setCurrentState(INGAME);
-
 	return;
 }
 
