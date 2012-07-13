@@ -14,6 +14,7 @@ public:
 	View(Controller*, Model*);
 	virtual ~View();
 	virtual void update();
+	void playerBtnClicked(PlayerBox* curBtn);
 
 private:
 	Controller *controller_;
@@ -53,6 +54,7 @@ private:
 	void btnGameStartClicked();
 	void btnGameEndClicked();
 	void btnHandClicked(int i);
+
 };
 
 #endif

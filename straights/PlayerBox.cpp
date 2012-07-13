@@ -1,7 +1,6 @@
 #include <sstream>
 #include <string>
 #include "PlayerBox.h"
-#include "Controller.h"
 
 using namespace std;
 
@@ -10,8 +9,6 @@ PlayerBox::PlayerBox(): iPlayerPoints_(0), iPlayerDiscards_(0), sPlayerBtnConten
 	vbPlayerBox_.add(btnPlayer_);
 	vbPlayerBox_.add(lblPlayerPoints_);
 	vbPlayerBox_.add(lblPlayerDiscards_);
-
-	btnPlayer_.signal_clicked().connect( sigc::mem_fun( *this,  &PlayerBox::playerBtnClicked));
 
 	update();
 }
@@ -69,14 +66,12 @@ void PlayerBox::setPlayerId(int i){
 	set_label("Player " + ss.str());
 }
 
-void PlayerBox::playerBtnClicked(){
-	if (sPlayerBtnContent_=="Human")
-		setComputerPlayer();
-	else if (sPlayerBtnContent_=="Computer")
-		setHumanPlayer();
-	else if (sPlayerBtnContent_=="Rage"){
+string PlayerBox::getPlayerBtnContent(){
+	return sPlayerBtnContent_;
+}
 
-	}
+Gtk::Button* PlayerBox::getButton(){
+	return &btnPlayer_;
 }
 
 bool PlayerBox::isHumamPlayer(){

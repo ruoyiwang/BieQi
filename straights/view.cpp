@@ -47,6 +47,9 @@ View::View(Controller* c, Model* m) : controller_(c), model_(m),vbMainPanel_(fal
 		pbPlayer_[i].setPlayerId(i+1);
 
 		hbPlayerBox_.add(pbPlayer_[i]);
+
+		Gtk::Button* btnPlayer = pbPlayer_[i].getButton();
+		btnPlayer->signal_clicked().connect(sigc::bind( sigc::mem_fun( *this, &View::playerBtnClicked ), &pbPlayer_[i] ));
 	}
 
 	// cards boxes init
@@ -89,19 +92,19 @@ void View::update(){
 
 	if (enmCurrentState == INGAME){
 		//update table
-		for (int i = 0; i < cHearts_.size(); i++){
+		for (unsigned int i = 0; i < cHearts_.size(); i++){
 			Card curCard = cHearts_.at(i);
 			imgHearts_[curCard.getRank()].set(Deck_.image(curCard.getRank(), curCard.getSuit()));
 		}
-		for (int i = 0; i < cDiamonds_.size(); i++){
+		for (unsigned int i = 0; i < cDiamonds_.size(); i++){
 			Card curCard = cDiamonds_.at(i);
 			imgDiamonds_[curCard.getRank()].set(Deck_.image(curCard.getRank(), curCard.getSuit()));
 		}
-		for (int i = 0; i < cClubs_.size(); i++){
+		for (unsigned int i = 0; i < cClubs_.size(); i++){
 			Card curCard = cClubs_.at(i);
 			imgClubs_[curCard.getRank()].set(Deck_.image(curCard.getRank(), curCard.getSuit()));
 		}
-		for (int i = 0; i < cSpades_.size(); i++){
+		for (unsigned int i = 0; i < cSpades_.size(); i++){
 			Card curCard = cSpades_.at(i);
 			imgSpades_[curCard.getRank()].set(Deck_.image(curCard.getRank(), curCard.getSuit()));
 		}
@@ -109,12 +112,12 @@ void View::update(){
 		//update card on hand
 		Player *curPlayer = model_->gamePlayerList().at(model_->iCurrentPlayer());
 
-		for (int i = 0; i < curPlayer->cHand().size(); i++){
+		for (unsigned int i = 0; i < curPlayer->cHand().size(); i++){
 			Card curCard = curPlayer->cHand().at(i);
 			imgHand_[i].set(Deck_.image(curCard.getRank(), curCard.getSuit()));
 			btnHand_[i].set_sensitive(true);
 		}
-		for (int i = curPlayer->cHand().size(); i < 13; i++){
+		for (unsigned int i = curPlayer->cHand().size(); i < 13; i++){
 			imgHand_[i].set(Deck_.null());
 			btnHand_[i].set_sensitive(false);
 		}
@@ -159,12 +162,12 @@ void View::update(){
 		//update card on hand
 		Player *curPlayer = model_->gamePlayerList().at(model_->iCurrentPlayer());
 
-		for (int i = 0; i < curPlayer->cHand().size(); i++){
+		for (unsigned int i = 0; i < curPlayer->cHand().size(); i++){
 			Card curCard = curPlayer->cHand().at(i);
 			imgHand_[i].set(Deck_.image(curCard.getRank(), curCard.getSuit()));
 			btnHand_[i].set_sensitive(true);
 		}
-		for (int i = curPlayer->cHand().size(); i < 13; i++){
+		for (unsigned int i = curPlayer->cHand().size(); i < 13; i++){
 			imgHand_[i].set(Deck_.null());
 			btnHand_[i].set_sensitive(false);
 		}
@@ -234,6 +237,17 @@ void View::btnGameStartClicked(){
 			break;
 	}
 	show_all();*/
+}
+
+void View::playerBtnClicked(PlayerBox* curBtn){
+	string btnContent = curBtn->getPlayerBtnContent();
+	if (btnContent=="Human")
+		curBtn->setComputerPlayer();
+	else if (btnContent=="Computer")
+		curBtn->setHumanPlayer();
+	else if (btnContent=="Rage"){
+		cout << "rage???!!"<<endl;
+	}
 }
 
 void View::btnGameEndClicked(){

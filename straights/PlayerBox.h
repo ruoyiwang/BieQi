@@ -1,7 +1,9 @@
+#ifndef PLAYERBOX_H
+#define PLAYERBOX_H
+
 #include "Controller.h"
 #include <string>
 #include <gtkmm.h>
-
 /****************
  a wrapper class for player boxes
 *****************/
@@ -18,12 +20,13 @@ private:
 	bool iPlayerId_;
 	int iIsHuman_;
 	void update();
-	void playerBtnClicked();
 public:
 	PlayerBox();
 	~PlayerBox();
 	// accessor
 	bool isHumamPlayer();
+	Gtk::Button* getButton();
+	std::string getPlayerBtnContent();
 	// mutators
 	void setHumanPlayer();
 	void setComputerPlayer();
@@ -37,3 +40,4 @@ public:
 	PlayerBox& operator= (const PlayerBox& );
 };
 
+#endif
