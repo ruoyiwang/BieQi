@@ -289,6 +289,7 @@ bool Model::performRoundEnd(){
 		referee_ = Referee();
 		for (int i = 0; i < 4; i++){
 			playerList_.at(i)->cHand().clear();
+			gamePlayerList_.clear();
 		}
 		int startingPlayerId  = referee_.dealing(cardTable_, playerList_) + 1; //referee.dealing() returns the player with 7 of spades
 		gamePlayerList_ = sortPlayerList(startingPlayerId -1); // playerid - 1 = player's pos in vector
