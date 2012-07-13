@@ -29,5 +29,6 @@ public:
 	void setPlayerPoints(int i);
 	void setPlayerDiscard(int i);
 	PlayerBox& operator= (const PlayerBox& );
+	void playerBtnClicked();
 };
 

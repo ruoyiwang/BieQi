@@ -10,6 +10,8 @@ PlayerBox::PlayerBox(): iPlayerPoints_(0), iPlayerDiscards_(0), sPlayerBtnConten
 	vbPlayerBox_.add(lblPlayerPoints_);
 	vbPlayerBox_.add(lblPlayerDiscards_);
 
+	btnPlayer_.signal_clicked().connect( sigc::mem_fun( *this,  &PlayerBox::playerBtnClicked));
+
 	update();
 }
 
@@ -62,4 +64,11 @@ void PlayerBox::setPlayerId(int i){
 	ss<<i;
 
 	set_label("Player " + ss.str());
+}
+
+void PlayerBox::playerBtnClicked(){
+	if (sPlayerBtnContent_=="Human")
+		setComputerPlayer();
+	else if (sPlayerBtnContent_=="Computer")
+		setHumanPlayer();
 }

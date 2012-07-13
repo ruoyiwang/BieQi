@@ -11,6 +11,9 @@ public:
 	View();
 	virtual ~View();
 	virtual void update();
+	void btnGameStartClicked();
+	void btnGameEndClicked();
+	void btnHandClicked(int i);
 
 private:
 	Gtk::VBox vbMainPanel_;
@@ -31,7 +34,7 @@ private:
 
 	Gtk::Button btnGameStart_;
 	Gtk::Entry enSeed_;
-	Gtk::Button btnGameEnd;
+	Gtk::Button btnGameEnd_;
 
 	DeckGUI Deck_;
 	
