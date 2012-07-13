@@ -39,7 +39,10 @@ void Model::gameStart(bool bHuman1, bool bHuman2, bool bHuman3, bool bHuman4, in
 	HumanPlayer* castTest = dynamic_cast<HumanPlayer*> (player);
 	if (!castTest)
 		gamePlay(1);
-
+	else{
+		pirntTableStatus();
+		printPlayerStatus();
+	}
 	return;
 }
 
@@ -67,6 +70,8 @@ void Model::gamePlay(int iHandCardIndex){
 		setCurrentState(INGAME);
 		notify();
 		if (!bValidPlay){	//else return right away, this allows the the console print as well as letting user click again
+			pirntTableStatus();
+			printPlayerStatus();
 			return;
 		}
 
@@ -94,17 +99,18 @@ void Model::gamePlay(int iHandCardIndex){
 		setCurrentState(INGAME);
 		notify();
 	} 
-	//notify();
-
-	//notify view to update;
+	
+	//since the comp ended, then the nxt will have to be a human player then print the status and stuff
+	
+	pirntTableStatus();
+	printPlayerStatus();
 
 	return;
 }
 
 bool Model::HumanPlayerGamePlay(Card, Command cmd){
 	Player* player = gamePlayerList_.at(iCurrentPlayer_);
-	pirntTableStatus();
-	vector<Card> legalPlay = printPlayerStatus();
+	vector<Card> legalPlay = referee_.getLegalPlays(cardTable_, player->cHand());
 
 	bool cmdFlag = false;
 
