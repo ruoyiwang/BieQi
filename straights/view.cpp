@@ -32,6 +32,7 @@ View::View() :vbMainPanel_(false, 10), hbControlBox_(true, 10),
 	frmTable_.set_shadow_type(Gtk::SHADOW_ETCHED_IN);
 	frmTable_.add(vbTableBox_);
 
+
 	for (int i = 0; i < 4; i++){
 		vbTableBox_.add(hbCardBox_[i]);
 
@@ -48,11 +49,10 @@ View::View() :vbMainPanel_(false, 10), hbControlBox_(true, 10),
 		vbPlayer_[i].add(lblPlayerDiscards_[i]);
 		lblPlayerDiscards_[i].set_label("0 discards");
 
-		char buffer [33];
-		itoa (i,buffer,10);
-		string temp = buffer;
-		string in = "Player " + temp;
-		frmPlayer_[i].set_label(in);
+		ostringstream ss;
+		ss<<i;
+
+		frmPlayer_[i].set_label("Player " + ss.str());
 	}
 
 	for (int i = 0; i < 13; i++){
