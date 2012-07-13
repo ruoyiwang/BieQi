@@ -3,7 +3,6 @@
 #include <sstream>
 #include <string>
 #include "Model.h"
-#include "Card.h"
 
 using namespace std;
 
@@ -145,6 +144,15 @@ bool Model::HumanPlayerGamePlay(Card, Command cmd){
 			break;
 	}
 	return cmdFlag;
+}
+
+void Model::rageQuit(){
+	Player* player = gamePlayerList_.at(iCurrentPlayer_);
+	player = referee_.rageQuit(player);
+	gamePlayerList_[iCurrentPlayer_] = player;
+	playerList_[player->iPlayerId()-1] = player;
+	
+	gamePlay(0);
 }
 
 

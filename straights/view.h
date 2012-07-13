@@ -54,6 +54,7 @@ private:
 	void btnGameStartClicked();
 	void btnGameEndClicked();
 	void btnHandClicked(int i);
+	void popUpMsgDialog(std::string title, std::string text);
 
 };
 

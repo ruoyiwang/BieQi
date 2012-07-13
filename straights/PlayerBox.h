@@ -1,7 +1,6 @@
 #ifndef PLAYERBOX_H
 #define PLAYERBOX_H
 
-#include "Controller.h"
 #include <string>
 #include <gtkmm.h>
 /****************

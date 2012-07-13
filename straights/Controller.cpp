@@ -16,6 +16,6 @@ void Controller::endGame(){
 	model_->endGame();
 }
 
-//void Controller::rageQuit(){
-//	model_->rageQuit();
-//}
+void Controller::rageQuit(){
+	model_->rageQuit();
+}

@@ -3,12 +3,10 @@
 #include <sstream>
 #include <iostream>
 #include <vector>
-#include "Observer.h"
 #include "Model.h"
 #include "Controller.h"
 #include "DeckGUI.h"
 #include "view.h"
-#include "Card.h"
 
 using namespace std;
 
@@ -147,6 +145,11 @@ void View::update(){
 		for (int i = 0; i < 4; i++){
 			pbPlayer_[i].setRageBtn();
 		}
+		ostringstream ss;
+		Player* curPlayer =(model_->gamePlayerList()).at(model_->iCurrentPlayer());
+		ss<<"A new round begins. It's player "<<curPlayer->iPlayerId()<<"'s turn to play";
+
+		popUpMsgDialog("Round Start", ss.str()); 
 	}
 	else if (enmCurrentState == ROUNDEND){
 		//update table
@@ -176,10 +179,7 @@ void View::update(){
 		pbPlayer_[iPlayerId-1].setPlayerPoints(curPlayer->iRealTimeScore());
 		pbPlayer_[iPlayerId-1].setPlayerDiscard(curPlayer->iDiscards());
 
-		
-		Gtk::MessageDialog msgdlgRoundEnd(*this, "End of Round");
-		msgdlgRoundEnd.set_secondary_text(model_->sRoundEndDialog());
-		msgdlgRoundEnd.run();
+		popUpMsgDialog("End of Round", model_->sRoundEndDialog());
 
 	}
 	else if (enmCurrentState == GAMEEND || enmCurrentState == FORCEDGAMEEND){
@@ -197,6 +197,8 @@ void View::update(){
 		for (int i = 0; i < 4; i++){
 			pbPlayer_[i].setActive();
 			pbPlayer_[i].setHumanPlayer();
+			pbPlayer_[i].setPlayerDiscard(0);
+			pbPlayer_[i].setPlayerPoints(0);
 		}
 
 		if (enmCurrentState != FORCEDGAMEEND){
@@ -209,15 +211,20 @@ void View::update(){
 			for (int i = 0; i < 4; i++){
 				Player *curPlayer = model_->playerList().at(i);
 				if (iMin == curPlayer->iScore()){
-					Gtk::MessageDialog msgdlgRoundEnd(*this, "End of Game");
 					ostringstream ss;
-					ss<<"Player"<<i+1<<"has won";
-					msgdlgRoundEnd.set_secondary_text(ss.str());
-					msgdlgRoundEnd.run();
+					ss<<"Player "<<i+1<<" has won";
+
+					popUpMsgDialog("End of Game", ss.str());
 				}
 			}
 		}
 	}
+}
+
+void View::popUpMsgDialog(string title, string text){
+	Gtk::MessageDialog msgdlg(*this, title);
+	msgdlg.set_secondary_text(text);
+	msgdlg.run();
 }
 
 
@@ -227,16 +234,6 @@ void View::btnGameStartClicked(){
 
 	controller_->gameStart(pbPlayer_[0].isHumamPlayer(),pbPlayer_[1].isHumamPlayer(),
 							pbPlayer_[2].isHumamPlayer(),pbPlayer_[3].isHumamPlayer(), iSeed);
-	/*
-	Gtk::Dialog dialog("Straight Game Start", *this, true, true);
-	Gtk::Button * okButton = dialog.add_button( Gtk::Stock::OK, Gtk::RESPONSE_OK);
-	int result = dialog.run();
-	
-	switch (result) {
-        case Gtk::RESPONSE_OK:
-			break;
-	}
-	show_all();*/
 }
 
 void View::playerBtnClicked(PlayerBox* curBtn){
@@ -246,7 +243,8 @@ void View::playerBtnClicked(PlayerBox* curBtn){
 	else if (btnContent=="Computer")
 		curBtn->setHumanPlayer();
 	else if (btnContent=="Rage"){
-		cout << "rage???!!"<<endl;
+		curBtn->setInactive();
+		controller_->rageQuit();
 	}
 }
 
