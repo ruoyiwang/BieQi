@@ -40,7 +40,7 @@ public:
 	~Model();
 	//game start and game play is for the controller to use
 	void gameStart(bool bHuman1, bool bHuman2, bool bHuman3, bool bHuman4, int seed);
-	void gamePlay(Card cardPlayed);
+	void gamePlay(int iHandCardIndex);
 
 	//the rest are the accessors for the view's update
 	Table cardTable();

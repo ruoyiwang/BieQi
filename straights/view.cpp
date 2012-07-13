@@ -70,14 +70,48 @@ View::View(Controller* c, Model* m) : controller_(c), model_(m),vbMainPanel_(fal
 	// event liseners
 	btnGameStart_.signal_clicked().connect(sigc::mem_fun( *this, &View::btnGameStartClicked ));
 	btnGameEnd_.signal_clicked().connect(sigc::mem_fun( *this, &View::btnGameEndClicked ));
-
+	model_->subscribe(this);
 	show_all();
 }
 
 View::~View(){}
 
 void View::update(){
+	Table cardTable = model_->cardTable();
+	std::vector<Card> cHearts_ = cardTable.cHearts();
+	std::vector<Card> cClubs_ = cardTable.cClubs();
+	std::vector<Card> cDiamonds_ = cardTable.cDiamonds();
+	std::vector<Card> cSpades_ = cardTable.cSpades();
+	
+	gameState enmCurrentState = model_->enmCurrentState();
 
+	if (enmCurrentState == INGAME){
+		//update table
+		for (int i = 0; i < cHearts_.size(); i++){
+			Card curCard = cHearts_.at(i);
+			imgHearts_[curCard.getRank()].set(Deck_.image(curCard.getRank(), curCard.getSuit()));
+		}
+		for (int i = 0; i < cDiamonds_.size(); i++){
+			Card curCard = cDiamonds_.at(i);
+			imgDiamonds_[curCard.getRank()].set(Deck_.image(curCard.getRank(), curCard.getSuit()));
+		}
+		for (int i = 0; i < cClubs_.size(); i++){
+			Card curCard = cClubs_.at(i);
+			imgClubs_[curCard.getRank()].set(Deck_.image(curCard.getRank(), curCard.getSuit()));
+		}
+		for (int i = 0; i < cSpades_.size(); i++){
+			Card curCard = cSpades_.at(i);
+			imgSpades_[curCard.getRank()].set(Deck_.image(curCard.getRank(), curCard.getSuit()));
+		}
+
+		//update card on hand
+		Player *curPlayer = model_->gamePlayerList().at(model_->iCurrentPlayer());
+
+		for (int i = 0; i < curPlayer->cHand().size(); i++){
+			Card curCard = curPlayer->cHand().at(i);
+			imgHand_[i].set(Deck_.image(curCard.getRank(), curCard.getSuit()));
+		}
+	}
 }
 
 

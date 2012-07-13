@@ -26,16 +26,20 @@ void Model::gameStart(bool bHuman1, bool bHuman2, bool bHuman3, bool bHuman4, in
 	int startingPlayerId  = referee_.dealing(cardTable_, playerList_) + 1; //referee.dealing() returns the player with 7 of spades
 	cout <<"A new round begins. It's player "<< startingPlayerId <<"'s turn to play."<<endl;
 	gamePlayerList_ = sortPlayerList(startingPlayerId -1); // playerid - 1 = player's pos in vector
+	iCurrentPlayer_ = startingPlayerId-1;
 
 	setCurrentState(GAMESTART);
 	notify();
 	setCurrentState(INGAME);
+	notify();
 	return;
 }
 
-void Model::gamePlay(Card cardPlayed){
+void Model::gamePlay(int iHandCardIndex){
 	Player* player = gamePlayerList_.at(iCurrentPlayer_);
 	HumanPlayer* castTest = dynamic_cast<HumanPlayer*> (player);
+	Card cardPlayed = player->cHand().at(iHandCardIndex);
+
 	if (castTest){
 		Command cmd;
 		cmd.card = cardPlayed;
@@ -49,6 +53,7 @@ void Model::gamePlay(Card cardPlayed){
 		bool bValidPlay = HumanPlayerGamePlay(cardPlayed, cmd);	//if valid then just go on
 		if (!bValidPlay){	//else return right away, this allows the the console print as well as letting user click again
 			//call update here
+			notify();
 			return;
 		}
 	}
@@ -58,13 +63,15 @@ void Model::gamePlay(Card cardPlayed){
 		player->play(cardTable_, referee_, dummyCard);
 	} 
 
+
+
 	//the round end algo
 	bool bRoundEnd = referee_.checkRoundEnd(cardTable_, gamePlayerList_);
 	if (bRoundEnd){
 		setCurrentState(ROUNDEND);
-		cardTable_ = Table();
 		bool bGameEnd = referee_.checkGameEnd(gamePlayerList_);
 		if (bGameEnd){
+			cardTable_ = Table();
 			setCurrentState(GAMEEND);
 			//reset a bunch of stuff here
 			referee_.clearTable(cardTable_);
@@ -87,13 +94,12 @@ void Model::gamePlay(Card cardPlayed){
 		iCurrentPlayer_ = 0;
 		castTest = dynamic_cast<HumanPlayer*> (gamePlayerList_.at(0));
 
-		//CALL THE FUCKING UPDATE FUNCTION
-		notify();
-
 		if (castTest){	//if it's human, let the human do the thingys
+			//CALL THE FUCKING UPDATE FUNCTION
+			notify();
 			return;
 		}
-		return gamePlay(Card(SPADE, ACE));;	//else it's a comp just pass in a random card
+		return gamePlay(1);;	//else it's a comp just pass in a random card
 	}
 
 
@@ -101,15 +107,13 @@ void Model::gamePlay(Card cardPlayed){
 
 	player = gamePlayerList_.at(iCurrentPlayer_);
 	castTest = dynamic_cast<HumanPlayer*> (player);
-	Card dummyCard = Card(CLUB, ACE);
 	if (!castTest)
-		gamePlay(dummyCard);
+		return gamePlay(1);
 
 	//notify view to update;
 
 	notify();
 	return;
-
 }
 
 bool Model::HumanPlayerGamePlay(Card, Command cmd){
