@@ -1,6 +1,7 @@
 #include <sstream>
-#include "PlayerBox.h"
 #include <string>
+#include "PlayerBox.h"
+#include "Controller.h"
 
 using namespace std;
 
@@ -73,6 +74,9 @@ void PlayerBox::playerBtnClicked(){
 		setComputerPlayer();
 	else if (sPlayerBtnContent_=="Computer")
 		setHumanPlayer();
+	else if (sPlayerBtnContent_=="Rage"){
+
+	}
 }
 
 bool PlayerBox::isHumamPlayer(){

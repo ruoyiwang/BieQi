@@ -14,9 +14,6 @@ public:
 	View(Controller*, Model*);
 	virtual ~View();
 	virtual void update();
-	void btnGameStartClicked();
-	void btnGameEndClicked();
-	void btnHandClicked(int i);
 
 private:
 	Controller *controller_;
@@ -51,6 +48,11 @@ private:
 
 	Gtk::Image imgHand_[13];
 	Gtk::Button btnHand_[13];
+
+	
+	void btnGameStartClicked();
+	void btnGameEndClicked();
+	void btnHandClicked(int i);
 };
 
 #endif

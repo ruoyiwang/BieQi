@@ -10,7 +10,8 @@ public:
 	Controller( Model* );
 	void gameStart(bool bHuman1, bool bHuman2, bool bHuman3, bool bHuman4, int seed);
 	void play(int cardIndex);
-	
+	void rageQuit();
+	void endGame();
 };
 
 #endif

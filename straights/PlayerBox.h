@@ -1,4 +1,4 @@
-
+#include "Controller.h"
 #include <string>
 #include <gtkmm.h>
 
@@ -18,6 +18,7 @@ private:
 	bool iPlayerId_;
 	int iIsHuman_;
 	void update();
+	void playerBtnClicked();
 public:
 	PlayerBox();
 	~PlayerBox();
@@ -34,6 +35,5 @@ public:
 	void setActive();
 	void setInactive();
 	PlayerBox& operator= (const PlayerBox& );
-	void playerBtnClicked();
 };
 

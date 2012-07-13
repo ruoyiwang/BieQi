@@ -12,3 +12,10 @@ void Controller::play(int cardIndex){
 	model_->gamePlay(cardIndex);
 }
 
+void Controller::endGame(){
+	model_->endGame();
+}
+
+//void Controller::rageQuit(){
+//	model_->rageQuit();
+//}

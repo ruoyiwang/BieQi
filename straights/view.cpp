@@ -210,7 +210,7 @@ void View::btnGameStartClicked(){
 }
 
 void View::btnGameEndClicked(){
-	
+	controller_->endGame();
 }
 
 void View::btnHandClicked(int i){

@@ -53,6 +53,8 @@ public:
 	std::vector<Player*> gamePlayerList();
 	int iCurrentPlayer();
 	gameState enmCurrentState();
+	void rageQuit();
+	void endGame();
 };
 
 #endif

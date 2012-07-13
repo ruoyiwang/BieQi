@@ -287,3 +287,9 @@ bool Model::checkRoundAndGameEndOrPerformIncrement(){
 	}
 	notify();
 }
+
+void Model::endGame(){
+	GameClean();
+	setCurrentState(GAMEEND);
+	notify();
+}
