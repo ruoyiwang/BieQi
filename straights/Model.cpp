@@ -61,6 +61,7 @@ void Model::gamePlay(Card cardPlayed){
 	bool bRoundEnd = referee_.checkRoundEnd(cardTable_, gamePlayerList_);
 	if (bRoundEnd){
 		setCurrentState(ROUNDEND);
+		cardTable_ = Table();
 		bool bGameEnd = referee_.checkGameEnd(gamePlayerList_);
 		if (bGameEnd){
 			setCurrentState(GAMEEND);
@@ -251,5 +252,7 @@ void Model::GameClean(){
 	for (int i = 0; i < playerList_.size(); i++){
 		delete playerList_.at(i);
 	}
-	referee_.clearTable(cardTable_);
+	playerList_.clear();
+	gamePlayerList_.clear();
+	cardTable_ = Table();
 }

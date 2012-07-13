@@ -50,7 +50,7 @@ void legalPlaysForOneSuit (vector<Card> suit, Suit suitType,  vector<Card>&legal
 // referee hands out the cards to players
 int Referee::dealing(Table& cardTable, vector<Player*>playerList){
 	shuffle(cardTable.Deck_.cCards_); // shuffle function
-	int ret = 0; // ret value which will be the player who has 7 of spades
+	int ret = 0; // 5ret value which will be the player who has 7 of spades
 
 	for (int i = 0 ; i < 4 ; i++){
 		for (int j = i*RANK_COUNT ; j < (i+1)*RANK_COUNT; j++){
