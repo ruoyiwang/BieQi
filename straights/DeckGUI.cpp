@@ -24,7 +24,6 @@ const char * image_names[] = {
 	"img/0_3.png", "img/1_3.png", "img/2_3.png", "img/3_3.png",
 	"img/0_4.png", "img/1_4.png", "img/2_4.png", "img/3_4.png",
 	"img/0_5.png", "img/1_5.png", "img/2_5.png", "img/3_5.png",
-	"img/0_5.png", "img/1_5.png", "img/2_5.png", "img/3_5.png",
 	"img/0_6.png", "img/1_6.png", "img/2_6.png", "img/3_6.png",
 	"img/0_7.png", "img/1_7.png", "img/2_7.png", "img/3_7.png",
 	"img/0_8.png", "img/1_8.png", "img/2_8.png", "img/3_8.png",

@@ -26,16 +26,27 @@ void Model::gameStart(bool bHuman1, bool bHuman2, bool bHuman3, bool bHuman4, in
 	int startingPlayerId  = referee_.dealing(cardTable_, playerList_) + 1; //referee.dealing() returns the player with 7 of spades
 	cout <<"A new round begins. It's player "<< startingPlayerId <<"'s turn to play."<<endl;
 	gamePlayerList_ = sortPlayerList(startingPlayerId -1); // playerid - 1 = player's pos in vector
-	iCurrentPlayer_ = startingPlayerId-1;
+	iCurrentPlayer_ = 0;
 
 	setCurrentState(GAMESTART);
 	notify();
 	setCurrentState(INGAME);
 	notify();
+
+	//test to see if comp if comp then enter play right away
+	Player* player = gamePlayerList_.at(iCurrentPlayer_);
+	HumanPlayer* castTest = dynamic_cast<HumanPlayer*> (player);
+	if (!castTest)
+		gamePlay(1);
+
 	return;
 }
 
 void Model::gamePlay(int iHandCardIndex){
+	setCurrentState(INGAME);
+
+	notify();
+
 	Player* player = gamePlayerList_.at(iCurrentPlayer_);
 	HumanPlayer* castTest = dynamic_cast<HumanPlayer*> (player);
 	Card cardPlayed = player->cHand().at(iHandCardIndex);
@@ -51,68 +62,38 @@ void Model::gamePlay(int iHandCardIndex){
 			cmd.type = DISCARD;
 		}
 		bool bValidPlay = HumanPlayerGamePlay(cardPlayed, cmd);	//if valid then just go on
+		//call update here
+		notify();
 		if (!bValidPlay){	//else return right away, this allows the the console print as well as letting user click again
-			//call update here
-			notify();
 			return;
 		}
+
+		if (checkRoundAndGameEndOrPerformIncrement())
+			return;
+	
+		player = gamePlayerList_.at(iCurrentPlayer_);
+		castTest = dynamic_cast<HumanPlayer*> (player);
+		notify();
 	}
-	else {
+
+	while(!castTest){		//loop until no longer a comp player
+		setCurrentState(INGAME);
 		Card dummyCard = Card(CLUB, ACE);
 		// computerPlayer, pass in a dummy card
 		player->play(cardTable_, referee_, dummyCard);
+		notify();
+
+		if (checkRoundAndGameEndOrPerformIncrement())
+			return;
+
+		player = gamePlayerList_.at(iCurrentPlayer_);
+		castTest = dynamic_cast<HumanPlayer*> (player);
+		notify();
 	} 
-
-
-
-	//the round end algo
-	bool bRoundEnd = referee_.checkRoundEnd(cardTable_, gamePlayerList_);
-	if (bRoundEnd){
-		setCurrentState(ROUNDEND);
-		bool bGameEnd = referee_.checkGameEnd(gamePlayerList_);
-		if (bGameEnd){
-			cardTable_ = Table();
-			setCurrentState(GAMEEND);
-			//reset a bunch of stuff here
-			referee_.clearTable(cardTable_);
-			int startingPlayerId  = referee_.dealing(cardTable_, playerList_) + 1; //referee.dealing() returns the player with 7 of spades
-			gamePlayerList_ = sortPlayerList(startingPlayerId -1); // playerid - 1 = player's pos in vector
-			cout <<"A new round begins. It's player "<< startingPlayerId <<"'s turn to play."<<endl;
-			referee_.clearTable(cardTable_);
-			//reset the player class and shits
-			//call update and return
-			//CALL THE FUCKING UPDATE FUNCTION
-			notify();
-			return;
-		}
-		
-		//reset a  bunch of shits here.
-		referee_.clearTable(cardTable_);
-		int startingPlayerId  = referee_.dealing(cardTable_, playerList_) + 1; //referee.dealing() returns the player with 7 of spades
-		gamePlayerList_ = sortPlayerList(startingPlayerId -1); // playerid - 1 = player's pos in vector
-		cout <<"A new round begins. It's player "<< startingPlayerId <<"'s turn to play."<<endl;
-		iCurrentPlayer_ = 0;
-		castTest = dynamic_cast<HumanPlayer*> (gamePlayerList_.at(0));
-
-		if (castTest){	//if it's human, let the human do the thingys
-			//CALL THE FUCKING UPDATE FUNCTION
-			notify();
-			return;
-		}
-		return gamePlay(1);;	//else it's a comp just pass in a random card
-	}
-
-
-	iCurrentPlayer_ = (iCurrentPlayer_ + 1)%4;
-
-	player = gamePlayerList_.at(iCurrentPlayer_);
-	castTest = dynamic_cast<HumanPlayer*> (player);
-	if (!castTest)
-		return gamePlay(1);
+	notify();
 
 	//notify view to update;
 
-	notify();
 	return;
 }
 
@@ -260,4 +241,49 @@ void Model::GameClean(){
 	playerList_.clear();
 	gamePlayerList_.clear();
 	cardTable_ = Table();
+}
+
+bool Model::performRoundEnd(){
+	//the round end algo
+	bool bRoundEnd = referee_.checkRoundEnd(cardTable_, gamePlayerList_);
+	if (bRoundEnd){	
+		//reset a  bunch of shits here.
+		referee_.clearTable(cardTable_);
+		referee_ = Referee();
+		int startingPlayerId  = referee_.dealing(cardTable_, playerList_) + 1; //referee.dealing() returns the player with 7 of spades
+		gamePlayerList_ = sortPlayerList(startingPlayerId -1); // playerid - 1 = player's pos in vector
+		cout <<"A new round begins. It's player "<< startingPlayerId <<"'s turn to play."<<endl;
+		iCurrentPlayer_ = 0;
+	}
+	return bRoundEnd;
+}
+
+bool Model::performGameEnd(){
+	bool bGameEnd = referee_.checkGameEnd(gamePlayerList_);
+	if (bGameEnd){
+		//reset a bunch of stuff here
+		GameClean();
+		//reset the player class and shits
+		//call update and return
+		//CALL THE FUCKING UPDATE FUNCTION
+		setCurrentState(GAMEEND);
+		notify();
+		return true;
+	}
+}
+
+bool Model::checkRoundAndGameEndOrPerformIncrement(){
+	if (performRoundEnd()){	//obv will reset players and hands and tables
+		setCurrentState(ROUNDEND);
+		if (performGameEnd()){	//hard reset
+			setCurrentState(GAMEEND);
+			return true; 
+			//I think if games ends here we need to just return
+		}
+	}
+	else{							//or just simply increment 
+		iCurrentPlayer_ = (iCurrentPlayer_ + 1)%4;
+		notify();
+	}
+	notify();
 }

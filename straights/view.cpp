@@ -110,6 +110,57 @@ void View::update(){
 		for (int i = 0; i < curPlayer->cHand().size(); i++){
 			Card curCard = curPlayer->cHand().at(i);
 			imgHand_[i].set(Deck_.image(curCard.getRank(), curCard.getSuit()));
+			btnHand_[i].set_sensitive(true);
+		}
+		for (int i = curPlayer->cHand().size(); i < 13; i++){
+			imgHand_[i].set(Deck_.null());
+			btnHand_[i].set_sensitive(false);
+		}
+	}
+	else if (enmCurrentState == GAMESTART){
+		for (int i = 0; i < 13; i++){
+			imgHand_[i].set(Deck_.null());
+			btnHand_[i].set_sensitive(true);
+			imgClubs_[i].set(Deck_.null());
+			imgDiamonds_[i].set(Deck_.null());
+			imgHearts_[i].set(Deck_.null());
+			imgSpades_[i].set(Deck_.null());
+			imgHand_[i].set(Deck_.null());
+		}
+	}
+	else if (enmCurrentState == ROUNDEND){
+		//update table
+		for (int i = 0; i < 13; i++){
+			imgHand_[i].set(Deck_.null());
+			btnHand_[i].set_sensitive(true);
+			imgClubs_[i].set(Deck_.null());
+			imgDiamonds_[i].set(Deck_.null());
+			imgHearts_[i].set(Deck_.null());
+			imgSpades_[i].set(Deck_.null());
+		}
+
+		//update card on hand
+		Player *curPlayer = model_->gamePlayerList().at(model_->iCurrentPlayer());
+
+		for (int i = 0; i < curPlayer->cHand().size(); i++){
+			Card curCard = curPlayer->cHand().at(i);
+			imgHand_[i].set(Deck_.image(curCard.getRank(), curCard.getSuit()));
+			btnHand_[i].set_sensitive(true);
+		}
+		for (int i = curPlayer->cHand().size(); i < 13; i++){
+			imgHand_[i].set(Deck_.null());
+			btnHand_[i].set_sensitive(false);
+		}
+	}
+	else if (enmCurrentState == GAMEEND){
+		for (int i = 0; i < 13; i++){
+			imgHand_[i].set(Deck_.null());
+			btnHand_[i].set_sensitive(false);
+			imgClubs_[i].set(Deck_.null());
+			imgDiamonds_[i].set(Deck_.null());
+			imgHearts_[i].set(Deck_.null());
+			imgSpades_[i].set(Deck_.null());
+			imgHand_[i].set(Deck_.null());
 		}
 	}
 }

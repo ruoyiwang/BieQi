@@ -35,6 +35,11 @@ private:
 	void setCurrentState(gameState);
 
 	void GameClean();
+
+	bool checkRoundAndGameEndOrPerformIncrement();
+	bool performRoundEnd();
+	bool performGameEnd();
+
 public:
 	Model();
 	~Model();
