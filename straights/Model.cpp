@@ -15,7 +15,14 @@ Model::~Model(){
 }
 
 void Model::gameStart(bool bHuman1, bool bHuman2, bool bHuman3, bool bHuman4, int seed){
+	playerList_.push_back( invitePlayer(1, bHuman1));
+	playerList_.push_back( invitePlayer(2, bHuman2));
+	playerList_.push_back( invitePlayer(3, bHuman3));
+	playerList_.push_back( invitePlayer(4, bHuman4));
 
+	int startingPlayerId  = referee_.dealing(cardTable_, playerList_) + 1; //referee.dealing() returns the player with 7 of spades
+	cout <<"A new round begins. It's player "<< startingPlayerId <<"'s turn to play."<<endl;
+	gamePlayerList_ = sortPlayerList(startingPlayerId -1); // playerid - 1 = player's pos in vector
 }
 
 void Model::gamePlay(Card cardPlayed){
@@ -23,13 +30,40 @@ void Model::gamePlay(Card cardPlayed){
 	HumanPlayer* castTest = dynamic_cast<HumanPlayer*> (player);
 	if (castTest){
 		Command cmd;
-		HumanPlayerGamePlay(cardPlayed, cmd);
+		cmd.card = cardPlayed;
+		vector<Card> legalPlays = referee_.getLegalPlays(cardTable_, player->cHand());	//check what leagal play this player has
+		if (legalPlays.size()!=0){
+			cmd.type = PLAY;
+		}
+		else{
+			cmd.type = DISCARD;
+		}
+		bool bValidPlay = HumanPlayerGamePlay(cardPlayed, cmd);	//if valid then just go on
+		if (!bValidPlay){	//else return right away, this allows the the console print as well as letting user click again
+			//call update here
+			return;
+		}
 	}
 	else {
 		Card dummyCard = Card(CLUB, ACE);
 		// computerPlayer, pass in a dummy card
 		player->play(cardTable_, referee_, dummyCard);
 	} 
+
+	bool bRoundEnd = referee_.checkRoundEnd(cardTable_, gamePlayerList_);
+	if (bRoundEnd){
+		bool bGameEnd = referee_.checkGameEnd(gamePlayerList_);
+		if (bGameEnd){
+			//reset a bunch of stuff here
+			//call update and return
+			return;
+		}
+		
+		//reset a  bunch of shits here.
+		//call update and return
+		return;
+	}
+
 
 	iCurrentPlayer_ = (iCurrentPlayer_ + 1)%4;
 
@@ -45,46 +79,44 @@ void Model::gamePlay(Card cardPlayed){
 
 }
 
-void Model::HumanPlayerGamePlay(Card, Command cmd){
+bool Model::HumanPlayerGamePlay(Card, Command cmd){
 	Player* player = gamePlayerList_.at(iCurrentPlayer_);
 	pirntTableStatus();
 	vector<Card> legalPlay = printPlayerStatus();
 
 	bool cmdFlag = false;
-	while (!cmdFlag){ // loops until a 
 
-		switch (cmd.type)
-		{
-			case PLAY:
-				if (referee_.checkValidPaly(cmd.card, legalPlay)){
-					cmdFlag = player->play(cardTable_, referee_, cmd.card);
-				}
+	switch (cmd.type)
+	{
+		case PLAY:
+			if (referee_.checkValidPaly(cmd.card, legalPlay)){
+				cmdFlag = player->play(cardTable_, referee_, cmd.card);
+			}
+			break;
+		case DISCARD:
+			if (legalPlay.size() != 0){
+				cout << "You have a legal play. You may not discard."<<endl;
 				break;
-			case DISCARD:
-				if (legalPlay.size() != 0){
-					cout << "You have a legal play. You may not discard."<<endl;
-					break;
-				}
-				cmdFlag = player->discard(referee_, cmd.card);
-				break;
-			case DECK:
-				printDeck(cardTable_);
-				break;
-			case QUIT:
-				exit(1);
-				break;
-			case RAGEQUIT:
-				player = referee_.rageQuit(player); // referee handles the angery player
-				player->play(cardTable_, referee_, cmd.card); // excute computer play
-				//gamePlayerList[playerPos] = player;
-				//playerList[player->iPlayerId()-1] = player;
-				cmdFlag = true; // exit cmd
-				break;
-			default:
-				break;
-		}
+			}
+			cmdFlag = player->discard(referee_, cmd.card);
+			break;
+		case DECK:
+			printDeck(cardTable_);
+			break;
+		case QUIT:
+			exit(1);
+			break;
+		case RAGEQUIT:
+			player = referee_.rageQuit(player); // referee handles the angery player
+			player->play(cardTable_, referee_, cmd.card); // excute computer play
+			//gamePlayerList[playerPos] = player;
+			//playerList[player->iPlayerId()-1] = player;
+			cmdFlag = true; // exit cmd
+			break;
+		default:
+			break;
 	}
-
+	return cmdFlag;
 }
 
 
@@ -139,4 +171,22 @@ void Model::printCardList(vector<Card> suit){
 	
 	for (unsigned int i = 0 ; i < suit.size();i++)
 		cout <<  " "  << ranks[suit[i].getRank()]; 
+}
+
+Player* Model::invitePlayer(int i, bool bHuman){
+	if (!bHuman)
+		return new CompPlayer(i);
+	else if (bHuman)
+		return new HumanPlayer(i);
+}
+
+vector<Player*> Model::sortPlayerList(int startingPlayerId){
+	vector<Player*> newPlayerList;
+
+	for (int i = startingPlayerId; i < 4; i++)
+		newPlayerList.push_back(playerList_[i]);
+	for (int i = 0 ; i < startingPlayerId; i++)
+		newPlayerList.push_back(playerList_[i]);
+
+	return newPlayerList;
 }

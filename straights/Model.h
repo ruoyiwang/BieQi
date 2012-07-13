@@ -1,3 +1,6 @@
+#ifndef __MODEL__
+#define __MODEL__
+
 #include <vector>
 #include <cstdlib>
 #include "Player.h"
@@ -17,11 +20,13 @@ private:
 	void pirntTableStatus();
 	std::vector<Card> printPlayerStatus();
 
-	void HumanPlayerGamePlay(Card cardPlayed, Command cmd);
+	bool HumanPlayerGamePlay(Card cardPlayed, Command cmd);
 	
 	void printDeck(Table& cardTable);
 	void printCardList(std::vector<Card> suit);
 
+	Player* invitePlayer(int i, bool bHuman);
+	std::vector<Player*> sortPlayerList(int startingPlayerId);
 
 public:
 	Model();
@@ -29,3 +34,5 @@ public:
 	void gameStart(bool bHuman1, bool bHuman2, bool bHuman3, bool bHuman4, int seed);
 	void gamePlay(Card cardPlayed);
 };
+
+#endif

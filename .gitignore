@@ -1,8 +1,9 @@
 # User-specific files
-*.suo
 *.user
 *.sln.docstates
 *.sdf
+/
+straights.suo
 
 # Build results
 [Dd]ebug/
@@ -25,7 +26,6 @@
 *.vspscc
 .builds
 *.dotCover
-#.suo
 
 ## TODO: If you have NuGet Package Restore enabled, uncomment this
 #packages/
@@ -36,6 +36,7 @@ ipch/
 *.ncb
 *.opensdf
 *.sdf
+*.suo
 
 # Visual Studio profiler
 *.psess
