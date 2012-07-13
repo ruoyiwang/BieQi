@@ -15,6 +15,8 @@ Model::~Model(){
 }
 
 void Model::gameStart(bool bHuman1, bool bHuman2, bool bHuman3, bool bHuman4, int seed){
+	//srand48(seed);
+	srand(seed);
 	playerList_.push_back( invitePlayer(1, bHuman1));
 	playerList_.push_back( invitePlayer(2, bHuman2));
 	playerList_.push_back( invitePlayer(3, bHuman3));
@@ -50,18 +52,37 @@ void Model::gamePlay(Card cardPlayed){
 		player->play(cardTable_, referee_, dummyCard);
 	} 
 
+	//the round end algo
 	bool bRoundEnd = referee_.checkRoundEnd(cardTable_, gamePlayerList_);
 	if (bRoundEnd){
 		bool bGameEnd = referee_.checkGameEnd(gamePlayerList_);
 		if (bGameEnd){
 			//reset a bunch of stuff here
+			referee_.clearTable(cardTable_);
+			int startingPlayerId  = referee_.dealing(cardTable_, playerList_) + 1; //referee.dealing() returns the player with 7 of spades
+			gamePlayerList_ = sortPlayerList(startingPlayerId -1); // playerid - 1 = player's pos in vector
+			cout <<"A new round begins. It's player "<< startingPlayerId <<"'s turn to play."<<endl;
+			referee_.clearTable(cardTable_);
+			//reset the player class and shits
 			//call update and return
+			//CALL THE FUCKING UPDATE FUNCTION
 			return;
 		}
 		
 		//reset a  bunch of shits here.
-		//call update and return
-		return;
+		referee_.clearTable(cardTable_);
+		int startingPlayerId  = referee_.dealing(cardTable_, playerList_) + 1; //referee.dealing() returns the player with 7 of spades
+		gamePlayerList_ = sortPlayerList(startingPlayerId -1); // playerid - 1 = player's pos in vector
+		cout <<"A new round begins. It's player "<< startingPlayerId <<"'s turn to play."<<endl;
+		iCurrentPlayer_ = 0;
+		castTest = dynamic_cast<HumanPlayer*> (gamePlayerList_.at(0));
+
+		//CALL THE FUCKING UPDATE FUNCTION
+
+		if (castTest){	//if it's human, let the human do the thingys
+			return;
+		}
+		return gamePlay(Card(SPADE, ACE));;	//else it's a comp just pass in a random card
 	}
 
 
