@@ -50,11 +50,12 @@ void Model::gameStart(bool bHuman1, bool bHuman2, bool bHuman3, bool bHuman4, in
 
 //the funciton that used to play a card
 void Model::gamePlay(int iHandCardIndex){
-	//update the image
+	//update the images
 	setCurrentState(INGAME);
 
 	notify();
 
+	//get the cur player and perform the isHuman (casting) test
 	Player* player = gamePlayerList_.at(iCurrentPlayer_);
 	HumanPlayer* castTest = dynamic_cast<HumanPlayer*> (player);
 	Card cardPlayed = player->cHand().at(iHandCardIndex);
@@ -63,7 +64,7 @@ void Model::gamePlay(int iHandCardIndex){
 		Command cmd;
 		cmd.card = cardPlayed;
 		vector<Card> legalPlays = referee_.getLegalPlays(cardTable_, player->cHand());	//check what leagal play this player has
-		if (legalPlays.size()!=0){
+		if (legalPlays.size()!=0){			//the program is making the decision for the player whether is play or discard
 			cmd.type = PLAY;
 		}
 		else{
@@ -78,16 +79,17 @@ void Model::gamePlay(int iHandCardIndex){
 			printPlayerStatus();
 			return;
 		}
-
+					//if the game should end, simply return
 		if (checkRoundAndGameEndOrPerformIncrement())
 			return;
-	
+					//iterate to the nxt player and notify
 		player = gamePlayerList_.at(iCurrentPlayer_);
 		castTest = dynamic_cast<HumanPlayer*> (player);
 		setCurrentState(INGAME);
 		notify();
 	}
 
+					//loop and excute next until it's no longer a comp player
 	while(!castTest){		//loop until no longer a comp player
 		setCurrentState(INGAME);
 		Card dummyCard = Card(CLUB, ACE);
@@ -112,6 +114,7 @@ void Model::gamePlay(int iHandCardIndex){
 	return;
 }
 
+//helper class for human playes
 bool Model::HumanPlayerGamePlay(Card, Command cmd){
 	Player* player = gamePlayerList_.at(iCurrentPlayer_);
 	vector<Card> legalPlay = referee_.getLegalPlays(cardTable_, player->cHand());
@@ -151,6 +154,7 @@ bool Model::HumanPlayerGamePlay(Card, Command cmd){
 	return cmdFlag;
 }
 
+//rage quit class  simply 
 void Model::rageQuit(){
 	Player* player = gamePlayerList_.at(iCurrentPlayer_);
 	player = referee_.rageQuit(player);
@@ -160,7 +164,7 @@ void Model::rageQuit(){
 	gamePlay(0);
 }
 
-
+//helper function that prints the deck
 void Model::printDeck(Table& cardTable){
 	vector<Card> deck = cardTable.getDeck();
 	for (unsigned int i = 0 ; i < deck.size(); i++){
@@ -170,7 +174,7 @@ void Model::printDeck(Table& cardTable){
 	}
 }
 
-
+//helper function that prints ths play status
 vector<Card> Model::printPlayerStatus(){
 	Player* player = gamePlayerList_.at(iCurrentPlayer_);
 	vector<Card> hand = player->cHand();
@@ -188,6 +192,7 @@ vector<Card> Model::printPlayerStatus(){
 	return legalPlays; // returns legal plays
 }
 
+//help function that prints the table
 void Model::pirntTableStatus(){
 	cout <<"Cards on the table:"<<endl;
 	cout << "Clubs:";
@@ -206,6 +211,7 @@ void Model::pirntTableStatus(){
 	cout<<endl;
 }
 
+//helper funciton that prints the lists of cards
 void Model::printCardList(vector<Card> suit){
 	string ranks[RANK_COUNT] = {"A", "2", "3", "4", "5", "6",
 	"7", "8", "9", "10", "J", "Q", "K"};
@@ -214,13 +220,15 @@ void Model::printCardList(vector<Card> suit){
 		cout <<  " "  << ranks[suit[i].getRank()]; 
 }
 
+//helper function which adds players
 Player* Model::invitePlayer(int i, bool bHuman){
 	if (!bHuman)
 		return new CompPlayer(i);
-	else if (bHuman)
+	else
 		return new HumanPlayer(i);
 }
 
+//helper function to re-order the players in order of playing the cards
 vector<Player*> Model::sortPlayerList(int startingPlayerId){
 	vector<Player*> newPlayerList;
 
@@ -232,6 +240,7 @@ vector<Player*> Model::sortPlayerList(int startingPlayerId){
 	return newPlayerList;
 }
 
+//accessor
 Table Model::cardTable(){
 	return cardTable_;
 }
@@ -256,6 +265,7 @@ void Model::setCurrentState(gameState state){
 	return;
 }
 
+//cleans the game
 void Model::GameClean(){
 	iSeed_ = 0;
 	for (int i = 0; i < playerList_.size(); i++){
@@ -266,6 +276,7 @@ void Model::GameClean(){
 	cardTable_ = Table();
 }
 
+//performs the actions when a round ends
 bool Model::performRoundEnd(){
 	//the round end algo
 	sRoundEndDialogConstructor();
@@ -287,6 +298,7 @@ bool Model::performRoundEnd(){
 	return bRoundEnd;
 }
 
+//performs the actions if the game ends
 bool Model::performGameEnd(){
 	bool bGameEnd = referee_.checkGameEnd(gamePlayerList_);
 	if (bGameEnd){
@@ -299,8 +311,10 @@ bool Model::performGameEnd(){
 		GameClean();
 		return true;
 	}
+	return false;
 }
 
+//the decision which wraps the round end and game end
 bool Model::checkRoundAndGameEndOrPerformIncrement(){
 	if (performRoundEnd()){	//obv will reset players and hands and tables
 		setCurrentState(ROUNDEND);
@@ -315,6 +329,7 @@ bool Model::checkRoundAndGameEndOrPerformIncrement(){
 		iCurrentPlayer_ = (iCurrentPlayer_ + 1)%4;
 		notify();
 	}
+	return false;
 }
 
 void Model::endGame(){		//for that game end button click
@@ -323,6 +338,7 @@ void Model::endGame(){		//for that game end button click
 	notify();
 }
 
+//the function that constructs the game end msg
 void Model::sRoundEndDialogConstructor(){
 	ostringstream ss;
 
@@ -345,6 +361,7 @@ void Model::sRoundEndDialogConstructor(){
 	sRoundEndDialog_ = ss.str();
 }
 
+//accessor that returns the msg.
 std::string Model::sRoundEndDialog(){
 	return sRoundEndDialog_;
 }
