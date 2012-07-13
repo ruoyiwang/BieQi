@@ -356,7 +356,7 @@ void Model::sRoundEndDialogConstructor(){
 		for (int j = 1; j < vcDiscards.size(); j++){
 			ss<<"+" <<vcDiscards.at(j).getRank()+1;
 		}
-		ss<<"="<<player->iScore()<<"\n";
+		ss<<"="<<player->iRealTimeScore()-player->iScore()<<"\n";
 	}
 	sRoundEndDialog_ = ss.str();
 }
