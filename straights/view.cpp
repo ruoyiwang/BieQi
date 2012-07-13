@@ -139,4 +139,5 @@ void View::btnGameEndClicked(){
 
 void View::btnHandClicked(int i){
 	cout << i <<endl;
+	controller_->play(i);
 }
