@@ -9,8 +9,8 @@
 #include <gtkmm/main.h>
 
 #include "view.h"
-#include "model.h"
-#include "controller.h"
+#include "Model.h"
+#include "Controller.h"
 
 using namespace std;
 
