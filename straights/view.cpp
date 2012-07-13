@@ -13,24 +13,31 @@ using namespace std;
 View::View(Controller* c, Model* m) : controller_(c), model_(m),vbMainPanel_(false, 10), hbControlBox_(true, 10), 
 		vbTableBox_(true, 10), lblTableLabel_("Cards on Table"),frmTable_("Cards on Table"),  
 		hbPlayerBox_(true, 10),	hbHandBox_(true, 10), frmHand_("Your Hand"),
-		btnGameStart_("Game Start"), btnGameEnd_("Game End!"), enSeed_()
+		btnGameStart_("Game Start"), btnGameEnd_("Game End!")
 {
+	// set default seed
 	enSeed_.set_text("0");
 	enSeed_.set_alignment(Gtk::ALIGN_CENTER);
+
+	// set window title
 	set_title("Straights");
 	set_border_width(20);
+	// add main panel to window
 	add(vbMainPanel_);
 
+	// add components to main panel
 	vbMainPanel_.add(hbControlBox_);
 	vbMainPanel_.add(frmTable_);
 	vbMainPanel_.add(hbPlayerBox_);
 	vbMainPanel_.add(frmHand_);
 	frmHand_.add(hbHandBox_);
 
+	// add buttons to game control box
 	hbControlBox_.add(btnGameStart_);
 	hbControlBox_.add(enSeed_);
 	hbControlBox_.add(btnGameEnd_);
 	
+	// set frame look
 	lblTableLabel_.set_alignment(Gtk::ALIGN_LEFT, Gtk::ALIGN_TOP);
 	frmTable_.set_shadow_type(Gtk::SHADOW_ETCHED_IN);
 	frmTable_.add(vbTableBox_);
@@ -51,22 +58,20 @@ View::View(Controller* c, Model* m) : controller_(c), model_(m),vbMainPanel_(fal
 	}
 
 	// cards boxes init
+	emptyTableAndHands();
 	for (int i = 0; i < 13; i++){
-		imgClubs_[i].set(Deck_.null());
-		imgDiamonds_[i].set(Deck_.null());
-		imgHearts_[i].set(Deck_.null());
-		imgSpades_[i].set(Deck_.null());
-		imgHand_[i].set(Deck_.null());
 
+		// get hand buttons
 		btnHand_[i].add(imgHand_[i]);
+		// set event listen to the button
 		btnHand_[i].signal_clicked().connect(sigc::bind( sigc::mem_fun( *this, &View::btnHandClicked ), i ));
-		btnHand_[i].set_sensitive(false);
 
+		// add img arrays to table card boxes
 		hbCardBox_[0].add(imgClubs_[i]);
 		hbCardBox_[1].add(imgDiamonds_[i]);
 		hbCardBox_[2].add(imgHearts_[i]);
 		hbCardBox_[3].add(imgSpades_[i]);
-
+		// add button to the box
 		hbHandBox_.add(btnHand_[i]);
 	}
 
@@ -80,6 +85,7 @@ View::View(Controller* c, Model* m) : controller_(c), model_(m),vbMainPanel_(fal
 View::~View(){}
 
 void View::update(){
+	// get essential variables
 	Table cardTable = model_->cardTable();
 	std::vector<Card> cHearts_ = cardTable.cHearts();
 	std::vector<Card> cClubs_ = cardTable.cClubs();
@@ -120,10 +126,12 @@ void View::update(){
 			btnHand_[i].set_sensitive(false);
 		}
 		
+		// update player inforamtion
 		int iPlayerId = curPlayer->iPlayerId();
 		pbPlayer_[iPlayerId-1].setPlayerPoints(curPlayer->iRealTimeScore());
 		pbPlayer_[iPlayerId-1].setPlayerDiscard(curPlayer->iDiscards());
 
+		// active current player & inactive other players
 		for (int i = 0; i < 4; i++){
 			if (i == (iPlayerId-1))
 				pbPlayer_[i].setActive();
@@ -133,67 +141,34 @@ void View::update(){
 
 	}
 	else if (enmCurrentState == GAMESTART){
-		for (int i = 0; i < 13; i++){
-			imgHand_[i].set(Deck_.null());
-			btnHand_[i].set_sensitive(false);
-			imgClubs_[i].set(Deck_.null());
-			imgDiamonds_[i].set(Deck_.null());
-			imgHearts_[i].set(Deck_.null());
-			imgSpades_[i].set(Deck_.null());
-			imgHand_[i].set(Deck_.null());
-		}
+		// a new game started, empty cards on table and hands
+		emptyTableAndHands();
 		for (int i = 0; i < 4; i++){
 			pbPlayer_[i].setRageBtn();
 		}
 		ostringstream ss;
-		Player* curPlayer =(model_->gamePlayerList()).at(model_->iCurrentPlayer());
-		ss<<"A new round begins. It's player "<<curPlayer->iPlayerId()<<"'s turn to play";
-
-		popUpMsgDialog("Round Start", ss.str()); 
 	}
 	else if (enmCurrentState == ROUNDEND){
 		//update table
-		for (int i = 0; i < 13; i++){
-			imgHand_[i].set(Deck_.null());
-			btnHand_[i].set_sensitive(true);
-			imgClubs_[i].set(Deck_.null());
-			imgDiamonds_[i].set(Deck_.null());
-			imgHearts_[i].set(Deck_.null());
-			imgSpades_[i].set(Deck_.null());
-		}
+		emptyTableAndHands();
 
 		//update card on hand
 		Player *curPlayer = model_->gamePlayerList().at(model_->iCurrentPlayer());
 
-		for (unsigned int i = 0; i < curPlayer->cHand().size(); i++){
-			Card curCard = curPlayer->cHand().at(i);
-			imgHand_[i].set(Deck_.image(curCard.getRank(), curCard.getSuit()));
-			btnHand_[i].set_sensitive(true);
-		}
-		for (unsigned int i = curPlayer->cHand().size(); i < 13; i++){
-			imgHand_[i].set(Deck_.null());
-			btnHand_[i].set_sensitive(false);
-		}
-		
-		int iPlayerId = curPlayer->iPlayerId();
-		pbPlayer_[iPlayerId-1].setPlayerPoints(curPlayer->iRealTimeScore());
-		pbPlayer_[iPlayerId-1].setPlayerDiscard(curPlayer->iDiscards());
-
 		popUpMsgDialog("End of Round", model_->sRoundEndDialog());
+
+		for (int i = 0; i < 4; i++){
+			curPlayer = model_->playerList().at(i);
+			pbPlayer_[i].setPlayerPoints(curPlayer->iRealTimeScore());
+			pbPlayer_[i].setPlayerDiscard(curPlayer->iDiscards());
+		}
 
 	}
 	else if (enmCurrentState == GAMEEND || enmCurrentState == FORCEDGAMEEND){
 
 		int iMin = 100;
-		for (int i = 0; i < 13; i++){
-			imgHand_[i].set(Deck_.null());
-			btnHand_[i].set_sensitive(false);
-			imgClubs_[i].set(Deck_.null());
-			imgDiamonds_[i].set(Deck_.null());
-			imgHearts_[i].set(Deck_.null());
-			imgSpades_[i].set(Deck_.null());
-			imgHand_[i].set(Deck_.null());
-		}
+		emptyTableAndHands();
+
 		for (int i = 0; i < 4; i++){
 			pbPlayer_[i].setActive();
 			pbPlayer_[i].setHumanPlayer();
@@ -218,6 +193,17 @@ void View::update(){
 				}
 			}
 		}
+	}
+}
+
+void View::emptyTableAndHands(){
+	for (int i = 0; i < RANK_COUNT; i++){
+		imgClubs_[i].set(Deck_.null());
+		imgDiamonds_[i].set(Deck_.null());
+		imgHearts_[i].set(Deck_.null());
+		imgSpades_[i].set(Deck_.null());
+		imgHand_[i].set(Deck_.null());
+		btnHand_[i].set_sensitive(false);
 	}
 }
 

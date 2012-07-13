@@ -271,6 +271,9 @@ bool Model::performRoundEnd(){
 		//reset a  bunch of shits here.
 		referee_.clearTable(cardTable_);
 		referee_ = Referee();
+		for (int i = 0; i < 4; i++){
+			playerList_.at(i)->cHand().clear();
+		}
 		int startingPlayerId  = referee_.dealing(cardTable_, playerList_) + 1; //referee.dealing() returns the player with 7 of spades
 		gamePlayerList_ = sortPlayerList(startingPlayerId -1); // playerid - 1 = player's pos in vector
 		cout <<"A new round begins. It's player "<< startingPlayerId <<"'s turn to play."<<endl;
@@ -284,7 +287,7 @@ bool Model::performGameEnd(){
 	if (bGameEnd){
 		//reset the player class and shits
 		//call update and return
-		//CALL THE FUCKING UPDATE FUNCTION
+		//CALL THE UPDATE FUNCTION
 		setCurrentState(GAMEEND);
 		notify();
 		//reset a bunch of stuff here

@@ -5,6 +5,7 @@
 #include "PlayerBox.h"
 #include "Observer.h"
 #include "DeckGUI.h"
+#include "Player.h"
 
 class Controller;
 class Model;
@@ -55,6 +56,8 @@ private:
 	void btnGameEndClicked();
 	void btnHandClicked(int i);
 	void popUpMsgDialog(std::string title, std::string text);
+	void emptyTableAndHands();
+	void updatePlayerData(Player* curPlayer, int iPlayerId);
 
 };
 

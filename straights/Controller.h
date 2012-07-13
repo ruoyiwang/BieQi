@@ -14,10 +14,10 @@ private:
 	Model *model_;
 public:
 	Controller( Model* );	// constructor
-	void gameStart(bool bHuman1, bool bHuman2, bool bHuman3, bool bHuman4, int seed); // gamestart mehtods
-	void play(int cardIndex);
-	void rageQuit();
-	void endGame();
+	void gameStart(bool bHuman1, bool bHuman2, bool bHuman3, bool bHuman4, int seed); // gamestart mehtod
+	void play(int cardIndex);	// play method used between model and view
+	void rageQuit();	// rage quit button clicked
+	void endGame();		// end game button clicked
 };
 
 #endif
