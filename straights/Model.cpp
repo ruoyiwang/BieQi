@@ -6,7 +6,7 @@
 
 using namespace std;
 
-Model::Model(){
+Model::Model():enmCurrentState_(INGAME){
 
 }
 
@@ -15,6 +15,7 @@ Model::~Model(){
 }
 
 void Model::gameStart(bool bHuman1, bool bHuman2, bool bHuman3, bool bHuman4, int seed){
+	GameClean();	//need to come before the seeding
 	//srand48(seed);
 	srand(seed);
 	playerList_.push_back( invitePlayer(1, bHuman1));
@@ -25,6 +26,10 @@ void Model::gameStart(bool bHuman1, bool bHuman2, bool bHuman3, bool bHuman4, in
 	int startingPlayerId  = referee_.dealing(cardTable_, playerList_) + 1; //referee.dealing() returns the player with 7 of spades
 	cout <<"A new round begins. It's player "<< startingPlayerId <<"'s turn to play."<<endl;
 	gamePlayerList_ = sortPlayerList(startingPlayerId -1); // playerid - 1 = player's pos in vector
+
+	setCurrentState(INGAME);
+
+	return;
 }
 
 void Model::gamePlay(Card cardPlayed){
@@ -55,8 +60,10 @@ void Model::gamePlay(Card cardPlayed){
 	//the round end algo
 	bool bRoundEnd = referee_.checkRoundEnd(cardTable_, gamePlayerList_);
 	if (bRoundEnd){
+		setCurrentState(ROUNDEND);
 		bool bGameEnd = referee_.checkGameEnd(gamePlayerList_);
 		if (bGameEnd){
+			setCurrentState(GAMEEND);
 			//reset a bunch of stuff here
 			referee_.clearTable(cardTable_);
 			int startingPlayerId  = referee_.dealing(cardTable_, playerList_) + 1; //referee.dealing() returns the player with 7 of spades
@@ -66,6 +73,7 @@ void Model::gamePlay(Card cardPlayed){
 			//reset the player class and shits
 			//call update and return
 			//CALL THE FUCKING UPDATE FUNCTION
+			notify();
 			return;
 		}
 		
@@ -78,6 +86,7 @@ void Model::gamePlay(Card cardPlayed){
 		castTest = dynamic_cast<HumanPlayer*> (gamePlayerList_.at(0));
 
 		//CALL THE FUCKING UPDATE FUNCTION
+		notify();
 
 		if (castTest){	//if it's human, let the human do the thingys
 			return;
@@ -96,6 +105,7 @@ void Model::gamePlay(Card cardPlayed){
 
 	//notify view to update;
 
+	notify();
 	return;
 
 }
@@ -210,4 +220,36 @@ vector<Player*> Model::sortPlayerList(int startingPlayerId){
 		newPlayerList.push_back(playerList_[i]);
 
 	return newPlayerList;
+}
+
+Table Model::cardTable(){
+	return cardTable_;
+}
+
+vector<Player*> Model::playerList(){
+	return playerList_;
+}
+vector<Player*> Model::gamePlayerList(){
+	return gamePlayerList_;
+}
+
+int Model::iCurrentPlayer(){
+	return iCurrentPlayer_;
+}
+
+gameState Model::enmCurrentState(){
+	return enmCurrentState_;
+}
+
+void Model::setCurrentState(gameState state){
+	enmCurrentState_ = state;
+	return;
+}
+
+void Model::GameClean(){
+	iSeed_ = 0;
+	for (int i = 0; i < playerList_.size(); i++){
+		delete playerList_.at(i);
+	}
+	referee_.clearTable(cardTable_);
 }

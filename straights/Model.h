@@ -7,8 +7,11 @@
 #include "Referee.h"
 #include "Command.h"
 #include "Card.h"
+#include "Subject.h"
 
-class Model{
+enum gameState {INGAME, ROUNDEND, GAMEEND};
+
+class Model : public Subject{
 private:
 	int iSeed_;
 	int iCurrentPlayer_;
@@ -28,11 +31,23 @@ private:
 	Player* invitePlayer(int i, bool bHuman);
 	std::vector<Player*> sortPlayerList(int startingPlayerId);
 
+	gameState enmCurrentState_;
+	void setCurrentState(gameState);
+
+	void GameClean();
 public:
 	Model();
 	~Model();
+	//game start and game play is for the controller to use
 	void gameStart(bool bHuman1, bool bHuman2, bool bHuman3, bool bHuman4, int seed);
 	void gamePlay(Card cardPlayed);
+
+	//the rest are the accessors for the view's update
+	Table cardTable();
+	std::vector<Player*> playerList();
+	std::vector<Player*> gamePlayerList();
+	int iCurrentPlayer();
+	gameState enmCurrentState();
 };
 
 #endif
