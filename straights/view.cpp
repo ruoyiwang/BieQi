@@ -12,8 +12,8 @@ using namespace std;
 View::View() :vbMainPanel_(false, 10), hbControlBox_(true, 10), 
 		vbTableBox_(true, 10), lblTableLabel_("Cards on Table"),frmTable_("Cards on Table"),  
 		hbPlayerBox_(true, 10),	hbHandBox_(true, 10), frmHand_("Your Hand"),
-		btnGameStart_("Game Start"), btnGameEnd("Game End!"), enSeed_(),
-		Deck_(DeckGUI()){
+		btnGameStart_("Game Start"), btnGameEnd("Game End!"), enSeed_()
+{
 	set_title("Straights");
 	set_border_width(20);
 	add(vbMainPanel_);
@@ -39,20 +39,9 @@ View::View() :vbMainPanel_(false, 10), hbControlBox_(true, 10),
 		hbCardBox_[i].set_spacing(7);
 		hbCardBox_[i].set_border_width(7);
 
-		hbPlayerBox_.add(frmPlayer_[i]);
-		frmPlayer_[i].add(vbPlayer_[i]);
-		vbPlayer_[i].add(btnPlayer_[i]);
+		pbPlayer_[i].setPlayerId(i+1);
 
-		btnPlayer_[i].set_label("Human");
-		vbPlayer_[i].add(lblPlayerPoints_[i]);
-		lblPlayerPoints_[i].set_label("0 points");
-		vbPlayer_[i].add(lblPlayerDiscards_[i]);
-		lblPlayerDiscards_[i].set_label("0 discards");
-
-		ostringstream ss;
-		ss<<i;
-
-		frmPlayer_[i].set_label("Player " + ss.str());
+		hbPlayerBox_.add(pbPlayer_[i]);
 	}
 
 	for (int i = 0; i < 13; i++){

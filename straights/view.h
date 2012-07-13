@@ -2,6 +2,7 @@
 #define MVC_VIEW_H
 
 #include <gtkmm.h>
+#include "PlayerBox.h"
 #include "Observer.h"
 #include "DeckGUI.h"
 
@@ -23,13 +24,7 @@ private:
 	Gtk::Frame frmTable_;
 
 	Gtk::HBox hbPlayerBox_;
-	Gtk::Frame frmPlayer_[4];
-
-	Gtk::VBox vbPlayer_[4];
-
-	Gtk::Button btnPlayer_[4];
-	Gtk::Label lblPlayerPoints_[4];
-	Gtk::Label lblPlayerDiscards_[4];
+	PlayerBox pbPlayer_[4];
 
 	Gtk::Frame frmHand_;
 	Gtk::HBox hbHandBox_;

@@ -70,6 +70,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Model.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="PlayerBox.cpp" />
     <ClCompile Include="Referee.cpp" />
     <ClCompile Include="shuffle.cpp" />
     <ClCompile Include="Subject.cpp" />
@@ -83,6 +84,7 @@
     <ClInclude Include="Model.h" />
     <ClInclude Include="Observer.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="PlayerBox.h" />
     <ClInclude Include="Referee.h" />
     <ClInclude Include="Subject.h" />
     <ClInclude Include="Table.h" />
