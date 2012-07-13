@@ -14,10 +14,12 @@ Model::~Model(){
 
 }
 
+//game start function which triggers the the game taking in player kind and the seed
 void Model::gameStart(bool bHuman1, bool bHuman2, bool bHuman3, bool bHuman4, int seed){
 	GameClean();	//need to come before the seeding
 	//srand48(seed);
 	srand(seed);
+					//gets the players in the list
 	playerList_.push_back( invitePlayer(1, bHuman1));
 	playerList_.push_back( invitePlayer(2, bHuman2));
 	playerList_.push_back( invitePlayer(3, bHuman3));
@@ -28,6 +30,7 @@ void Model::gameStart(bool bHuman1, bool bHuman2, bool bHuman3, bool bHuman4, in
 	gamePlayerList_ = sortPlayerList(startingPlayerId -1); // playerid - 1 = player's pos in vector
 	iCurrentPlayer_ = 0;
 
+	//sets the states and displays the right things
 	setCurrentState(GAMESTART);
 	notify();
 	setCurrentState(INGAME);
@@ -45,7 +48,9 @@ void Model::gameStart(bool bHuman1, bool bHuman2, bool bHuman3, bool bHuman4, in
 	return;
 }
 
+//the funciton that used to play a card
 void Model::gamePlay(int iHandCardIndex){
+	//update the image
 	setCurrentState(INGAME);
 
 	notify();

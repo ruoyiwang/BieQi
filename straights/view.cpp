@@ -92,10 +92,12 @@ void View::update(){
 	std::vector<Card> cDiamonds_ = cardTable.cDiamonds();
 	std::vector<Card> cSpades_ = cardTable.cSpades();
 	
+	//gets the current state of the game so that update can be performed properly
 	gameState enmCurrentState = model_->enmCurrentState();
 
+	//if the state is in game
 	if (enmCurrentState == INGAME){
-		//update table
+		//update table that is being displayed
 		for (unsigned int i = 0; i < cHearts_.size(); i++){
 			Card curCard = cHearts_.at(i);
 			imgHearts_[curCard.getRank()].set(Deck_.image(curCard.getRank(), curCard.getSuit()));
@@ -140,6 +142,7 @@ void View::update(){
 		}
 
 	}
+	//if the state is just as the game started
 	else if (enmCurrentState == GAMESTART){
 		// a new game started, empty cards on table and hands
 		emptyTableAndHands();
@@ -164,11 +167,13 @@ void View::update(){
 		}
 
 	}
+	//if the game either ended normally, or forced by the Game end button
 	else if (enmCurrentState == GAMEEND || enmCurrentState == FORCEDGAMEEND){
 
 		int iMin = 100;
 		emptyTableAndHands();
 
+		//reset all the buttons and players
 		for (int i = 0; i < 4; i++){
 			pbPlayer_[i].setActive();
 			pbPlayer_[i].setHumanPlayer();
@@ -176,6 +181,7 @@ void View::update(){
 			pbPlayer_[i].setPlayerPoints(0);
 		}
 
+		//if it's forced, then we would need to get the minimum score and the winner where displaying is neccessary
 		if (enmCurrentState != FORCEDGAMEEND){
 			for (int i = 0; i < 4; i++){
 				Player *curPlayer = model_->playerList().at(i);
@@ -196,6 +202,7 @@ void View::update(){
 	}
 }
 
+//functions used to empty the table and the hands
 void View::emptyTableAndHands(){
 	for (int i = 0; i < RANK_COUNT; i++){
 		imgClubs_[i].set(Deck_.null());
@@ -207,13 +214,14 @@ void View::emptyTableAndHands(){
 	}
 }
 
+//function used to cll the msg dialog
 void View::popUpMsgDialog(string title, string text){
 	Gtk::MessageDialog msgdlg(*this, title);
 	msgdlg.set_secondary_text(text);
 	msgdlg.run();
 }
 
-
+//funtion used to pass the game start event to the controller
 void View::btnGameStartClicked(){
 	string seed = enSeed_.get_text();
 	int iSeed = atoi(seed.c_str());
@@ -222,6 +230,7 @@ void View::btnGameStartClicked(){
 							pbPlayer_[2].isHumamPlayer(),pbPlayer_[3].isHumamPlayer(), iSeed);
 }
 
+//funtion used to pass the players event to the controller
 void View::playerBtnClicked(PlayerBox* curBtn){
 	string btnContent = curBtn->getPlayerBtnContent();
 	if (btnContent=="Human")
@@ -234,10 +243,12 @@ void View::playerBtnClicked(PlayerBox* curBtn){
 	}
 }
 
+//funtion used to pass the game end event to the controller
 void View::btnGameEndClicked(){
 	controller_->endGame();
 }
 
+//funtion used to pass the card clicking event to the controller
 void View::btnHandClicked(int i){
 	cout << i <<endl;
 	controller_->play(i);
