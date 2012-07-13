@@ -351,12 +351,9 @@ void Model::sRoundEndDialogConstructor(){
 		}
 		ss<<"\n";
 		ss<<"Player"<<(i+1)<<" - Score: ";
-		if (vcDiscards.size()!=0)
-			ss<<vcDiscards.at(0).getRank()+1;
-		for (int j = 1; j < vcDiscards.size(); j++){
-			ss<<"+" <<vcDiscards.at(j).getRank()+1;
-		}
-		ss<<"="<<player->iRealTimeScore()-player->iScore()<<"\n";
+		ss<<player->iScore()<<" + ";
+		ss<<player->iRealTimeScore()-player->iScore();
+		ss<<" = "<<player->iRealTimeScore()<<"\n";
 	}
 	sRoundEndDialog_ = ss.str();
 }
