@@ -66,6 +66,7 @@
   <ItemGroup>
     <ClCompile Include="Card.cpp" />
     <ClCompile Include="Command.cpp" />
+    <ClCompile Include="Controller.cpp" />
     <ClCompile Include="DeckGUI.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Model.cpp" />
@@ -80,6 +81,7 @@
   <ItemGroup>
     <ClInclude Include="Card.h" />
     <ClInclude Include="Command.h" />
+    <ClInclude Include="Controller.h" />
     <ClInclude Include="DeckGUI.h" />
     <ClInclude Include="Model.h" />
     <ClInclude Include="Observer.h" />

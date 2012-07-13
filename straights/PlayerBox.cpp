@@ -4,7 +4,7 @@
 
 using namespace std;
 
-PlayerBox::PlayerBox(): iPlayerPoints_(0), iPlayerDiscards_(0), sPlayerBtnContent_("Human"), Gtk::Frame(){
+PlayerBox::PlayerBox(): iPlayerPoints_(0), iPlayerDiscards_(0), sPlayerBtnContent_("Human"), iIsHuman_(true), Gtk::Frame(){
 	add(vbPlayerBox_);
 	vbPlayerBox_.add(btnPlayer_);
 	vbPlayerBox_.add(lblPlayerPoints_);
@@ -34,10 +34,12 @@ PlayerBox& PlayerBox::operator= (const PlayerBox& ){
 // mutators
 void PlayerBox::setHumanPlayer(){
 	sPlayerBtnContent_ = "Human";
+	iIsHuman_ = true;
 	update();
 }
 void PlayerBox::setComputerPlayer(){
 	sPlayerBtnContent_ = "Computer";
+	iIsHuman_ = false;
 	update();
 }
 void PlayerBox::setRangeBtn(){
@@ -71,4 +73,8 @@ void PlayerBox::playerBtnClicked(){
 		setComputerPlayer();
 	else if (sPlayerBtnContent_=="Computer")
 		setHumanPlayer();
+}
+
+bool PlayerBox::isHumamPlayer(){
+	return iIsHuman_;
 }

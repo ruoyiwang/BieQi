@@ -2,19 +2,22 @@
 #include <cstdlib>
 #include <sstream>
 #include <iostream>
-#include "observer.h"
-#include "subject.h"
+#include <vector>
+#include "Observer.h"
+#include "Model.h"
+#include "Controller.h"
 #include "DeckGUI.h"
 #include "view.h"
 
 using namespace std;
 
-View::View() :vbMainPanel_(false, 10), hbControlBox_(true, 10), 
+View::View(Controller* c, Model* m) : controller_(c), model_(m),vbMainPanel_(false, 10), hbControlBox_(true, 10), 
 		vbTableBox_(true, 10), lblTableLabel_("Cards on Table"),frmTable_("Cards on Table"),  
 		hbPlayerBox_(true, 10),	hbHandBox_(true, 10), frmHand_("Your Hand"),
 		btnGameStart_("Game Start"), btnGameEnd_("Game End!"), enSeed_()
 {
-
+	enSeed_.set_text("0");
+	enSeed_.set_alignment(Gtk::ALIGN_CENTER);
 	set_title("Straights");
 	set_border_width(20);
 	add(vbMainPanel_);
@@ -79,6 +82,12 @@ void View::update(){
 
 
 void View::btnGameStartClicked(){
+	string seed = enSeed_.get_text();
+	int iSeed = atoi(seed.c_str());
+
+	controller_->gameStart(pbPlayer_[0].isHumamPlayer(),pbPlayer_[1].isHumamPlayer(),
+							pbPlayer_[2].isHumamPlayer(),pbPlayer_[3].isHumamPlayer(), iSeed);
+	/*
 	Gtk::Dialog dialog("Straight Game Start", *this, true, true);
 	Gtk::Button * okButton = dialog.add_button( Gtk::Stock::OK, Gtk::RESPONSE_OK);
 	int result = dialog.run();
@@ -87,7 +96,7 @@ void View::btnGameStartClicked(){
         case Gtk::RESPONSE_OK:
 			break;
 	}
-	show_all();
+	show_all();*/
 }
 
 void View::btnGameEndClicked(){

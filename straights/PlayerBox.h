@@ -15,11 +15,14 @@ private:
 	std::string sPlayerBtnContent_;
 	int iPlayerPoints_;
 	int iPlayerDiscards_;
-	int iPlayerId_;
+	bool iPlayerId_;
+	int iIsHuman_;
 	void update();
 public:
 	PlayerBox();
 	~PlayerBox();
+	// accessor
+	bool isHumamPlayer();
 	// mutators
 	void setHumanPlayer();
 	void setComputerPlayer();

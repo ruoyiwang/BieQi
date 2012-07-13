@@ -6,9 +6,12 @@
 #include "Observer.h"
 #include "DeckGUI.h"
 
+class Controller;
+class Model;
+
 class View : public Gtk::Window, public Observer{
 public:
-	View();
+	View(Controller*, Model*);
 	virtual ~View();
 	virtual void update();
 	void btnGameStartClicked();
@@ -16,6 +19,9 @@ public:
 	void btnHandClicked(int i);
 
 private:
+	Controller *controller_;
+	Model *model_;
+
 	Gtk::VBox vbMainPanel_;
 
 	Gtk::HBox hbControlBox_;
