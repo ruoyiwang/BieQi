@@ -172,8 +172,16 @@ void View::update(){
 		int iPlayerId = curPlayer->iPlayerId();
 		pbPlayer_[iPlayerId-1].setPlayerPoints(curPlayer->iRealTimeScore());
 		pbPlayer_[iPlayerId-1].setPlayerDiscard(curPlayer->iDiscards());
+
+		
+		Gtk::MessageDialog msgdlgRoundEnd(*this, "End of Round");
+		msgdlgRoundEnd.set_secondary_text(model_->sRoundEndDialog());
+		msgdlgRoundEnd.run();
+
 	}
-	else if (enmCurrentState == GAMEEND){
+	else if (enmCurrentState == GAMEEND || enmCurrentState == FORCEDGAMEEND){
+
+		int iMin = 100;
 		for (int i = 0; i < 13; i++){
 			imgHand_[i].set(Deck_.null());
 			btnHand_[i].set_sensitive(false);
@@ -186,6 +194,25 @@ void View::update(){
 		for (int i = 0; i < 4; i++){
 			pbPlayer_[i].setActive();
 			pbPlayer_[i].setHumanPlayer();
+		}
+
+		if (enmCurrentState != FORCEDGAMEEND){
+			for (int i = 0; i < 4; i++){
+				Player *curPlayer = model_->playerList().at(i);
+				if (iMin > curPlayer->iScore()){
+					iMin = curPlayer->iScore();
+				}
+			}
+			for (int i = 0; i < 4; i++){
+				Player *curPlayer = model_->playerList().at(i);
+				if (iMin == curPlayer->iScore()){
+					Gtk::MessageDialog msgdlgRoundEnd(*this, "End of Game");
+					ostringstream ss;
+					ss<<"Player"<<i+1<<"has won";
+					msgdlgRoundEnd.set_secondary_text(ss.str());
+					msgdlgRoundEnd.run();
+				}
+			}
 		}
 	}
 }

@@ -118,3 +118,11 @@ int Player::iRealTimeScore(){
 int Player::iDiscards(){
 	return cDiscarded_.size();
 }
+
+vector<Card> Player::cDiscarded(){
+	return cDiscarded_;
+}
+
+int Player::iScore(){
+	return iScore_;
+}

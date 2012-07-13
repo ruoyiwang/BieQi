@@ -1,12 +1,13 @@
 #include <vector>
 #include <iostream>
+#include <sstream>
 #include <string>
 #include "Model.h"
 #include "Card.h"
 
 using namespace std;
 
-Model::Model():enmCurrentState_(INGAME){
+Model::Model():enmCurrentState_(INGAME),sRoundEndDialog_(""){
 
 }
 
@@ -63,6 +64,7 @@ void Model::gamePlay(int iHandCardIndex){
 		}
 		bool bValidPlay = HumanPlayerGamePlay(cardPlayed, cmd);	//if valid then just go on
 		//call update here
+		setCurrentState(INGAME);
 		notify();
 		if (!bValidPlay){	//else return right away, this allows the the console print as well as letting user click again
 			return;
@@ -73,6 +75,7 @@ void Model::gamePlay(int iHandCardIndex){
 	
 		player = gamePlayerList_.at(iCurrentPlayer_);
 		castTest = dynamic_cast<HumanPlayer*> (player);
+		setCurrentState(INGAME);
 		notify();
 	}
 
@@ -88,9 +91,10 @@ void Model::gamePlay(int iHandCardIndex){
 
 		player = gamePlayerList_.at(iCurrentPlayer_);
 		castTest = dynamic_cast<HumanPlayer*> (player);
+		setCurrentState(INGAME);
 		notify();
 	} 
-	notify();
+	//notify();
 
 	//notify view to update;
 
@@ -245,8 +249,11 @@ void Model::GameClean(){
 
 bool Model::performRoundEnd(){
 	//the round end algo
+	sRoundEndDialogConstructor();
 	bool bRoundEnd = referee_.checkRoundEnd(cardTable_, gamePlayerList_);
 	if (bRoundEnd){	
+		setCurrentState(ROUNDEND);
+		notify();
 		//reset a  bunch of shits here.
 		referee_.clearTable(cardTable_);
 		referee_ = Referee();
@@ -261,13 +268,13 @@ bool Model::performRoundEnd(){
 bool Model::performGameEnd(){
 	bool bGameEnd = referee_.checkGameEnd(gamePlayerList_);
 	if (bGameEnd){
-		//reset a bunch of stuff here
-		GameClean();
 		//reset the player class and shits
 		//call update and return
 		//CALL THE FUCKING UPDATE FUNCTION
 		setCurrentState(GAMEEND);
 		notify();
+		//reset a bunch of stuff here
+		GameClean();
 		return true;
 	}
 }
@@ -276,7 +283,8 @@ bool Model::checkRoundAndGameEndOrPerformIncrement(){
 	if (performRoundEnd()){	//obv will reset players and hands and tables
 		setCurrentState(ROUNDEND);
 		if (performGameEnd()){	//hard reset
-			setCurrentState(GAMEEND);
+			//setCurrentState(GAMEEND);
+			//notify();
 			return true; 
 			//I think if games ends here we need to just return
 		}
@@ -285,11 +293,36 @@ bool Model::checkRoundAndGameEndOrPerformIncrement(){
 		iCurrentPlayer_ = (iCurrentPlayer_ + 1)%4;
 		notify();
 	}
+}
+
+void Model::endGame(){		//for that game end button click
+	GameClean();
+	setCurrentState(FORCEDGAMEEND);
 	notify();
 }
 
-void Model::endGame(){
-	GameClean();
-	setCurrentState(GAMEEND);
-	notify();
+void Model::sRoundEndDialogConstructor(){
+	ostringstream ss;
+
+	for (int i = 0; i < 4; i++){
+		Player *player = playerList_.at(i);
+		ss<<"Player"<<(i+1)<<" - Discards:";
+		vector<Card> vcDiscards = player->cDiscarded();
+		for (int j = 0; j < vcDiscards.size(); j++){
+			ss<<" " <<vcDiscards.at(j);
+		}
+		ss<<"\n";
+		ss<<"Player"<<(i+1)<<" - Score: ";
+		if (vcDiscards.size()!=0)
+			ss<<vcDiscards.at(0).getRank()+1;
+		for (int j = 1; j < vcDiscards.size(); j++){
+			ss<<"+" <<vcDiscards.at(j).getRank()+1;
+		}
+		ss<<"="<<player->iScore()<<"\n";
+	}
+	sRoundEndDialog_ = ss.str();
+}
+
+std::string Model::sRoundEndDialog(){
+	return sRoundEndDialog_;
 }

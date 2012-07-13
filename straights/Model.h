@@ -9,7 +9,7 @@
 #include "Card.h"
 #include "Subject.h"
 
-enum gameState {GAMESTART, INGAME, ROUNDEND, GAMEEND};
+enum gameState {GAMESTART, INGAME, ROUNDEND, GAMEEND, FORCEDGAMEEND};
 
 class Model : public Subject{
 private:
@@ -39,6 +39,8 @@ private:
 	bool checkRoundAndGameEndOrPerformIncrement();
 	bool performRoundEnd();
 	bool performGameEnd();
+	std::string sRoundEndDialog_;
+	void sRoundEndDialogConstructor();
 
 public:
 	Model();
@@ -55,6 +57,7 @@ public:
 	gameState enmCurrentState();
 	void rageQuit();
 	void endGame();
+	std::string sRoundEndDialog();
 };
 
 #endif

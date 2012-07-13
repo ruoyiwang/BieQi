@@ -16,7 +16,9 @@ public:
 	int iDiscards();
 	int iPlayerId() const ; // accessor
 	int iRealTimeScore();
+	int iScore();
 	std::vector<Card> cHand() const; // accessor for main, used to print hand
+	std::vector<Card> cDiscarded(); // vector of discards
 protected:
 	std::vector<Card>* getcHand();	// special accessor for CompPlayer, because compPlayer need to modify hand
 	bool checkInHand(Card&);
