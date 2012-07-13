@@ -8,6 +8,7 @@
 #include "Controller.h"
 #include "DeckGUI.h"
 #include "view.h"
+#include "Card.h"
 
 using namespace std;
 
@@ -58,6 +59,7 @@ View::View(Controller* c, Model* m) : controller_(c), model_(m),vbMainPanel_(fal
 
 		btnHand_[i].add(imgHand_[i]);
 		btnHand_[i].signal_clicked().connect(sigc::bind( sigc::mem_fun( *this, &View::btnHandClicked ), i ));
+		btnHand_[i].set_sensitive(false);
 
 		hbCardBox_[0].add(imgClubs_[i]);
 		hbCardBox_[1].add(imgDiamonds_[i]);
@@ -116,16 +118,31 @@ void View::update(){
 			imgHand_[i].set(Deck_.null());
 			btnHand_[i].set_sensitive(false);
 		}
+		
+		int iPlayerId = curPlayer->iPlayerId();
+		pbPlayer_[iPlayerId-1].setPlayerPoints(curPlayer->iRealTimeScore());
+		pbPlayer_[iPlayerId-1].setPlayerDiscard(curPlayer->iDiscards());
+
+		for (int i = 0; i < 4; i++){
+			if (i == (iPlayerId-1))
+				pbPlayer_[i].setActive();
+			else
+				pbPlayer_[i].setInactive();
+		}
+
 	}
 	else if (enmCurrentState == GAMESTART){
 		for (int i = 0; i < 13; i++){
 			imgHand_[i].set(Deck_.null());
-			btnHand_[i].set_sensitive(true);
+			btnHand_[i].set_sensitive(false);
 			imgClubs_[i].set(Deck_.null());
 			imgDiamonds_[i].set(Deck_.null());
 			imgHearts_[i].set(Deck_.null());
 			imgSpades_[i].set(Deck_.null());
 			imgHand_[i].set(Deck_.null());
+		}
+		for (int i = 0; i < 4; i++){
+			pbPlayer_[i].setRageBtn();
 		}
 	}
 	else if (enmCurrentState == ROUNDEND){
@@ -151,6 +168,10 @@ void View::update(){
 			imgHand_[i].set(Deck_.null());
 			btnHand_[i].set_sensitive(false);
 		}
+		
+		int iPlayerId = curPlayer->iPlayerId();
+		pbPlayer_[iPlayerId-1].setPlayerPoints(curPlayer->iRealTimeScore());
+		pbPlayer_[iPlayerId-1].setPlayerDiscard(curPlayer->iDiscards());
 	}
 	else if (enmCurrentState == GAMEEND){
 		for (int i = 0; i < 13; i++){
@@ -161,6 +182,10 @@ void View::update(){
 			imgHearts_[i].set(Deck_.null());
 			imgSpades_[i].set(Deck_.null());
 			imgHand_[i].set(Deck_.null());
+		}
+		for (int i = 0; i < 4; i++){
+			pbPlayer_[i].setActive();
+			pbPlayer_[i].setHumanPlayer();
 		}
 	}
 }

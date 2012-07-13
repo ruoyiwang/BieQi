@@ -13,7 +13,9 @@ public:
 	~Player();
 	virtual bool play(Table&, Referee&, Card&) = 0;	
 	virtual bool discard(Referee&, Card&) = 0;
+	int iDiscards();
 	int iPlayerId() const ; // accessor
+	int iRealTimeScore();
 	std::vector<Card> cHand() const; // accessor for main, used to print hand
 protected:
 	std::vector<Card>* getcHand();	// special accessor for CompPlayer, because compPlayer need to modify hand

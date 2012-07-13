@@ -26,11 +26,13 @@ public:
 	// mutators
 	void setHumanPlayer();
 	void setComputerPlayer();
-	void setRangeBtn();
-	void setRangeBtnDisabled();
+	void setRageBtn();
+	void setRageBtnDisabled();
 	void setPlayerId(int i);
 	void setPlayerPoints(int i);
 	void setPlayerDiscard(int i);
+	void setActive();
+	void setInactive();
 	PlayerBox& operator= (const PlayerBox& );
 	void playerBtnClicked();
 };

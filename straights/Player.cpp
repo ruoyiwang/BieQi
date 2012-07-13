@@ -7,7 +7,9 @@
 
 using namespace std;
 
-Player::Player(int iPlayerId):iPlayerId_(iPlayerId),iScore_(0){}
+Player::Player(int iPlayerId):iPlayerId_(iPlayerId),iScore_(0){
+	cDiscarded_.clear();
+}
 
 Player::~Player(){}
 
@@ -103,4 +105,16 @@ void Player::removeFromHand(Card& cCard){
 // special accessor for CompPlayer, because compPlayer need to modify hand
 vector<Card>* Player::getcHand(){
 	return &cHand_;
+}
+
+int Player::iRealTimeScore(){
+	int iTempScore = 0;
+	for (int i = 0; i < cDiscarded_.size(); i++){
+		iTempScore += cDiscarded_.at(i).getRank()+1;
+	}
+	return iScore_+iTempScore;
+}
+
+int Player::iDiscards(){
+	return cDiscarded_.size();
 }

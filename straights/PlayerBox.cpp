@@ -42,13 +42,13 @@ void PlayerBox::setComputerPlayer(){
 	iIsHuman_ = false;
 	update();
 }
-void PlayerBox::setRangeBtn(){
-	sPlayerBtnContent_ = "Range";
+void PlayerBox::setRageBtn(){
+	sPlayerBtnContent_ = "Rage";
 	update();
 }
 
-void PlayerBox::setRangeBtnDisabled(){
-	sPlayerBtnContent_ = "Range";
+void PlayerBox::setRageBtnDisabled(){
+	sPlayerBtnContent_ = "Rage";
 	update();
 }
 
@@ -77,4 +77,12 @@ void PlayerBox::playerBtnClicked(){
 
 bool PlayerBox::isHumamPlayer(){
 	return iIsHuman_;
+}
+
+
+void PlayerBox::setActive(){
+	btnPlayer_.set_sensitive(true);
+}
+void PlayerBox::setInactive(){
+	btnPlayer_.set_sensitive(false);
 }
